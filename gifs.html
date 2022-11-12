@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+
+<html>
+ <title>home.txt</title>
+ <head>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Inconsolata&display=swap">
+    <style>
+
+     
+      body {
+        font-family: 'Inconsolata', monospace;
+        font-size: 11px;
+      }
+      a:link, a:visited {
+  	    text-decoration: none;
+	      line-height: 1;
+	      white-space:pre;
+      }
+
+      button {
+        font-family: 'Inconsolata', monospace;
+        font-size: 11px;
+        background: none;
+        border: 0;
+        padding: 0;
+        line-height: 1;
+        text-decoration: none;
+        white-space:pre;
+        cursor: pointer;
+      }
+.center {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 600px;
+}
+      #container{width:100%;margin: auto;}
+#left{float:left;width:240px;}
+#right{float:right;width:240px;}
+#center{margin:0 auto;width:600px;
+  height:700px;
+  display: flex; 
+  justify-content: center;
+  align-items: center;
+  }
+
+    </style>
+    <style id="textcolor">
+       button, a:link, a:visited {color: black;}
+    </style>
+
+
+    <script>
+      totalgifs=413;
+      var preloadimage=new Image();
+      function env(e) {
+        envs=["plain","night","ufo","bluescreen","dark","electric","seafoam","peach","electric lizard","vampire"];
+	      select=envs.indexOf(e);
+        txtcolor=["black","#ffcfc2","#00ff00","#ffffff","#404040","#000000","#0062ff","#ffae00","#00ba28","#000000"][select];
+        maincolor=["#ffffff","#1b0f2b","#000000","#0000ff","#000000","#ffff00","#00ffa6","#fceae8","#4dff00","#900000"][select];
+        edgecolor=["#f7feff","#514187","#ff0000","#c3c3c3","#040404","#000000","#00eaff","#fcfbd2","#bfff00","#292929"][select];
+        document.getElementById("edge").style.backgroundColor = edgecolor;
+        document.getElementById("main").style.backgroundColor = maincolor;
+        document.getElementById("main").style.color = txtcolor;
+        document.getElementById("dropmenu").style.backgroundColor = maincolor;
+        document.getElementById("dropmenu").style.color = txtcolor;
+        document.getElementById("textcolor").innerHTML = "a:link, a:visited, button {color: "+txtcolor+";}";
+        history.replaceState({ additionalInformation: ':)' },":D" , "gifs?e="+e+"&n="+n);
+     }
+
+
+
+
+     function nextimage(){
+        if(n<totalgifs){
+          n=n+1;
+        }
+        document.getElementById('thegif').src="gfs/"+n.toString()+".gif";
+        document.getElementById('thegif1').src="gfs/"+n.toString()+".gif";
+        history.replaceState({ additionalInformation: ':)' },":D" , "gifs?e="+e+"&n="+n);
+        document.getElementById("counter").innerHTML = n.toString().padStart(4," ")+"/"+totalgifs.toString().padEnd(4," ");
+        document.getElementById("dropcounter").innerHTML = n.toString().padStart(4," ")+"/"+totalgifs.toString().padEnd(4," ");
+        preloadimage.src = "gfs/"+(n+1).toString()+".gif";
+     }
+     function previmage(){
+        if(n>1){
+          n=n-1;
+        }
+        document.getElementById('thegif').src="gfs/"+n.toString()+".gif";
+        document.getElementById('thegif1').src="gfs/"+n.toString()+".gif";
+        history.replaceState({ additionalInformation: ':)' },":D" , "gifs?e="+e+"&n="+n);
+        document.getElementById("counter").innerHTML = n.toString().padStart(4," ")+"/"+totalgifs.toString().padEnd(4," ");
+        document.getElementById("dropcounter").innerHTML = n.toString().padStart(4," ")+"/"+totalgifs.toString().padEnd(4," ");
+        preloadimage.src = "gfs/"+(n-1).toString()+".gif";
+     }
+
+     function drip(){
+
+        document.getElementById("dropmenu").style.display = "";
+
+        document.getElementById("main").style.display = "none";
+
+     }
+     function drop(ein){
+        e=ein
+        document.getElementById("dropmenu").style.display = "none";
+
+        document.getElementById("main").style.display = "";
+        env(e);
+
+     }
+
+     function tile(){
+        document.getElementById("tiled").style.display = "";
+        str="url('gfs/"+(n).toString()+".gif')";
+        document.getElementById("tiled").style.backgroundImage = str;
+        document.getElementById("dropmenu").style.display = "none";
+        document.getElementById("main").style.display = "none";
+
+     }
+
+     function untile(){
+        document.getElementById("tiled").style.display = "none";
+        document.getElementById("dropmenu").style.display = "none";
+        document.getElementById("zoomed").style.display = "none";
+        document.getElementById("main").style.display = "";
+     }
+     function zoom(){
+        document.getElementById("zoomed").style.display = "";
+        document.getElementById('biggif').src="gfs/"+n.toString()+".gif";
+        document.getElementById("dropmenu").style.display = "none";
+        document.getElementById("main").style.display = "none";
+     }
+    </script>
+ </head>
+
+<body id="edge"  style="background-color:#f7feff;margin:0; padding:0;-webkit-appearance: none;-moz-appearance: none;appearance: none;">
+<div id="tiled" onclick='untile()' style=" height: 100vh; background-image: url('gfs/1.gif');  cursor: pointer;">
+</div>
+<div id="zoomed" onclick='untile()'  style=" height: 100vh; text-align:center;  cursor: pointer;">
+<img id="biggif" src="gfs/1.gif"  style="height: 100vh; vertical-align: middle;">
+</div>
+<div id="main" style="width:1080px;line-height: 1;white-space:pre; auto; background-color:white;min-height:100vh;margin-right: auto; margin-left:auto;">
+                                                                                                                                                                         
+                                                                                                                                                                      
+                                                                                                                                                                          
+                                                                                                                                                         
+                                                                                                                                            
+                                                                                                  
+                                                                                             _________......__________                               
+                                                                        ___.....------´´´´´´´                         ``````---._     
+                                                                 _.--´´´                    /\                                    `-.      
+                                                             .--´                          /  \                                      `.   
+                                                            (               _______        \  (        _______           _____/\       \                 
+                                                             `--´       ,-~´       )_     . `-.`\   ,~'      (  /\   .-=´       \       )            
+                                                             .'      _.´    ,-~=~-,  )   /(    \|  /     ___  `´  ) /  _,^._.    )  `--<                           
+                                                            /       _)     /     /__(   /  `='\  _/    ,´   `-.  ( /  (      \__(       `.                        
+                                                            \_,´    )     /            /       ) )    (   )\   \_/(  .´   _._             \  
+                                                             /     /     /    _       /    _.-´ /      `-´  ) _,-. \ `-.-´   `-´\          \                       
+                                                            /      >     \_   \`-.   /   .´    /   ,-´`._  (  )   ) `-.,_,.^,    )          |                        
+                                                           /       \_      `-._)  ) /   /     /   /      `´   \    `._  _,.´    /           |                        
+                                                          |          `-.___    __/ /   /    ,'   /             `._    `´    _,.´            /
+                                                          |                `)  \   `--'      `--´                 ``------´´         _    ./                                          
+                                                           \       _        \  /                           .-                       ´ `.   ;           
+                                                            \    .´ `        \/          .´       `.      /__       _    `.        _.--|  / 
+                                                             |  / `.           .        /        _.-\    /   `.__.-´.     .\    .-´    '-´          
+                                                             '-´    \     -.__.-\      /`.     .´    `--´            \   /  \  /            
+                                                                     \    /      `.__.´   \   /                       `-´    `´     
+                                                                      \  /                 `-´        <button onclick="drip()">/\</button>                                         
+                                                                       `´                            <button onclick="drip()">/  \</button>                                                                 
+                                                                                                     <button onclick="drip()">`--´</button>                                                        
+<div id="container">
+<div id="left"> 
+  
+   
+  
+
+  
+  
+  
+  
+ 
+          
+  
+  
+ 
+  
+ 
+          
+ 
+ 
+ 
+ 
+ 
+ 
+                               <button onclick="previmage()">/|</button>
+                             <button onclick="previmage()">.´/|</button>
+                           <button onclick="previmage()">.´ //|</button>
+                         <button onclick="previmage()">.´  ///|</button>
+                       <button onclick="previmage()">.´   ////|</button>
+                     <button onclick="previmage()">.´    /////|</button>
+                   <button onclick="previmage()">.´     //////|</button>
+                 <button onclick="previmage()">.´      ///////|</button>
+               <button onclick="previmage()">.´       ////////|</button>
+             <button onclick="previmage()">.´        /////////|</button>
+           <button onclick="previmage()">.´         //////////|</button>
+         <button onclick="previmage()">.´__________///////////|</button>
+         <button onclick="previmage()">`7##########\//////////|</button>
+           <button onclick="previmage()">`7#########\/////////|</button>
+             <button onclick="previmage()">`7########\////////|</button>
+               <button onclick="previmage()">`7#######\///////|</button>
+                 <button onclick="previmage()">`7######\//////|</button>
+                   <button onclick="previmage()">`7#####\/////|</button>
+                     <button onclick="previmage()">`7####\////|</button>
+                       <button onclick="previmage()">`7###\///|</button>
+                         <button onclick="previmage()">`7##\//|</button>
+                           <button onclick="previmage()">`7#\/|</button>
+                             <button onclick="previmage()">`7\|</button>
+                               <button onclick="previmage()">\|</button>
+
+  </div>
+  <div id="right" style="text-align: right;" >  
+ 
+  
+ 
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+
+<button onclick="nextimage()">|\</button>                               
+<button onclick="nextimage()">|\`.</button>                             
+<button onclick="nextimage()">|\\ `.</button>                           
+<button onclick="nextimage()">|\\\  `.</button>                         
+<button onclick="nextimage()">|\\\\   `.</button>                       
+<button onclick="nextimage()">|\\\\\    `.</button>                     
+<button onclick="nextimage()">|\\\\\\     `.</button>                   
+<button onclick="nextimage()">|\\\\\\\      `.</button>                 
+<button onclick="nextimage()">|\\\\\\\\       `.</button>               
+<button onclick="nextimage()">|\\\\\\\\\        `.</button>             
+<button onclick="nextimage()">|\\\\\\\\\\         `.</button>           
+<button onclick="nextimage()">|\\\\\\\\\\\__________`.</button>         
+<button onclick="nextimage()">|\\\\\\\\\\/##########F´</button>         
+<button onclick="nextimage()">|\\\\\\\\\/#########F´</button>           
+<button onclick="nextimage()">|\\\\\\\\/########F´</button>             
+<button onclick="nextimage()">|\\\\\\\/#######F´</button>               
+<button onclick="nextimage()">|\\\\\\/######F´</button>                 
+<button onclick="nextimage()">|\\\\\/#####F´</button>                   
+<button onclick="nextimage()">|\\\\/####F´</button>                     
+<button onclick="nextimage()">|\\\/###F´</button>                       
+<button onclick="nextimage()">|\\/##F´</button>                         
+<button onclick="nextimage()">|\/#F´</button>                           
+<button onclick="nextimage()">|/F´</button>                             
+<button onclick="nextimage()">|/</button>                               
+</div>
+  <div id="center" ><img id="thegif" src="gfs/1.gif" class="center" ></div>
+</div>
+                   
+                   
+                   
+                   
+                   
+                   
+                   
+                              ________________________________________________________________________________________________________________________________________
+                             /                                                                                                                                        \
+                            /                                                                                                                                          \
+                           /           <button onclick="tile()">:::</button>                                                 <span id="counter">         </span>                                                      <button onclick="zoom()">&lt; &gt;</button>           \
+                          /                                                                                                                                              \
+                         /________________________________________________________________________________________________________________________________________________\                         
+
+
+                         
+
+</div><div id="dropmenu" style="width:1080px;line-height: 1;white-space:pre; auto; background-color:white;min-height:100vh;margin-right: auto; margin-left:auto;">
+                                                                                                                                                                         
+                                                                                                                                                                      
+                                                                                                                                                                          
+                                                                                                                                                         
+                                                                                                                                            
+                                                                                                  
+                                                                                             _________......__________                               
+                                                                        ___.....------´´´´´´´                         ``````---._     
+                                                                 _.--´´´                    /\                                    `-.      
+                                                             .--´                          /  \                                      `.   
+                                                            (               _______        \  (        _______           _____/\       \                 
+                                                             `--´       ,-~´       )_     . `-.`\   ,~'      (  /\   .-=´       \       )            
+                                                             .'      _.´    ,-~=~-,  )   /(    \|  /     ___  `´  ) /  _,^._.    )  `--<                           
+                                                            /       _)     /     /__(   /  `='\  _/    ,´   `-.  ( /  (      \__(       `.                        
+                                                            \_,´    )     /            /       ) )    (   )\   \_/(  .´   _._             \  
+                                                             /     /     /    _       /    _.-´ /      `-´  ) _,-. \ `-.-´   `-´\          \                       
+                                                            /      >     \_   \`-.   /   .´    /   ,-´`._  (  )   ) `-.,_,.^,    )          |                        
+                                                           /       \_      `-._)  ) /   /     /   /      `´   \    `._  _,.´    /           |                        
+                                                          |          `-.___    __/ /   /    ,'   /             `._    `´    _,.´            /
+                                                          |                `)  \   `--'      `--´                 ``------´´         _    ./                                          
+                                                           \       _        \  /                           .-                       ´ `.   ;           
+                                                            \    .´ `        \/          .´       `.      /__       _    `.        _.--|  / 
+                                                             |  / `.           .        /        _.-\    /   `.__.-´.     .\    .-´    '-´          
+                                                             '-´    \     -.__.-\      /`.     .´    `--´            \   /  \  /            
+                                                                     \    /      `.__.´   \   /                       `-´    `´     
+                                                                      \  /                 `-´                                                
+                                                                       `´                                                                                             
+                                                                                                     
+                                                                   <button onclick="drop('plain')" style="color:#000000; background-color:white"> /\ </button>   <button onclick="drop('night')" style="color:#ffcfc2; background-color:#1b0f2b"> /\ </button>   <button onclick="drop('ufo')" style="color:#00ff00; background-color:#000000"> /\ </button>   <button onclick="drop('dark')" style="color:#404040; background-color:#000000"> /\ </button>   <button onclick="drop('bluescreen')" style="color:#ffffff; background-color:#0000ff"> /\ </button>   <button onclick="drop('vampire')" style="color:#000000; background-color:#900000"> /\ </button>   <button onclick="drop('electric')" style="color:#000000; background-color:#ffff00"> /\ </button>   <button onclick="drop('electric lizard')" style="color:#00ba28; background-color:#4dff00"> /\ </button>   <button onclick="drop('seafoam')" style="color:#0062ff; background-color:#00ffa6"> /\ </button>   <button onclick="drop('peach')" style="color:#ffae00; background-color:#fceae8"> /\ </button>
+                                                                   <button onclick="drop('plain')" style="color:#000000; background-color:white">/  \</button>   <button onclick="drop('night')" style="color:#ffcfc2; background-color:#1b0f2b">/  \</button>   <button onclick="drop('ufo')" style="color:#00ff00; background-color:#000000">/  \</button>   <button onclick="drop('dark')" style="color:#404040; background-color:#000000">/  \</button>   <button onclick="drop('bluescreen')" style="color:#ffffff; background-color:#0000ff">/  \</button>   <button onclick="drop('vampire')" style="color:#000000; background-color:#900000">/  \</button>   <button onclick="drop('electric')" style="color:#000000; background-color:#ffff00">/  \</button>   <button onclick="drop('electric lizard')" style="color:#00ba28; background-color:#4dff00">/  \</button>   <button onclick="drop('seafoam')" style="color:#0062ff; background-color:#00ffa6">/  \</button>   <button onclick="drop('peach')" style="color:#ffae00; background-color:#fceae8">/  \</button>
+                                                                   <button onclick="drop('plain')" style="color:#000000; background-color:white">`--´</button>   <button onclick="drop('night')" style="color:#ffcfc2; background-color:#1b0f2b">`--´</button>   <button onclick="drop('ufo')" style="color:#00ff00; background-color:#000000">`--´</button>   <button onclick="drop('dark')" style="color:#404040; background-color:#000000">`--´</button>   <button onclick="drop('bluescreen')" style="color:#ffffff; background-color:#0000ff">`--´</button>   <button onclick="drop('vampire')" style="color:#000000; background-color:#900000">`--´</button>   <button onclick="drop('electric')" style="color:#000000; background-color:#ffff00">`--´</button>   <button onclick="drop('electric lizard')" style="color:#00ba28; background-color:#4dff00">`--´</button>   <button onclick="drop('seafoam')" style="color:#0062ff; background-color:#00ffa6">`--´</button>   <button onclick="drop('peach')" style="color:#ffae00; background-color:#fceae8">`--´</button>                            
+
+                                                                                                                            
+
+<div id="container">
+<div id="left"> 
+  
+   
+  
+
+  
+  
+  
+  
+ 
+          
+  
+  
+ 
+  
+ 
+          
+ 
+ 
+ 
+ 
+ 
+ 
+                               <button onclick="previmage()">/|</button>
+                             <button onclick="previmage()">.´/|</button>
+                           <button onclick="previmage()">.´ //|</button>
+                         <button onclick="previmage()">.´  ///|</button>
+                       <button onclick="previmage()">.´   ////|</button>
+                     <button onclick="previmage()">.´    /////|</button>
+                   <button onclick="previmage()">.´     //////|</button>
+                 <button onclick="previmage()">.´      ///////|</button>
+               <button onclick="previmage()">.´       ////////|</button>
+             <button onclick="previmage()">.´        /////////|</button>
+           <button onclick="previmage()">.´         //////////|</button>
+         <button onclick="previmage()">.´__________///////////|</button>
+         <button onclick="previmage()">`7##########\//////////|</button>
+           <button onclick="previmage()">`7#########\/////////|</button>
+             <button onclick="previmage()">`7########\////////|</button>
+               <button onclick="previmage()">`7#######\///////|</button>
+                 <button onclick="previmage()">`7######\//////|</button>
+                   <button onclick="previmage()">`7#####\/////|</button>
+                     <button onclick="previmage()">`7####\////|</button>
+                       <button onclick="previmage()">`7###\///|</button>
+                         <button onclick="previmage()">`7##\//|</button>
+                           <button onclick="previmage()">`7#\/|</button>
+                             <button onclick="previmage()">`7\|</button>
+                               <button onclick="previmage()">\|</button>
+
+  </div>
+  <div id="right" style="text-align: right;" >  
+ 
+  
+ 
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+
+<button onclick="nextimage()">|\</button>                               
+<button onclick="nextimage()">|\`.</button>                             
+<button onclick="nextimage()">|\\ `.</button>                           
+<button onclick="nextimage()">|\\\  `.</button>                         
+<button onclick="nextimage()">|\\\\   `.</button>                       
+<button onclick="nextimage()">|\\\\\    `.</button>                     
+<button onclick="nextimage()">|\\\\\\     `.</button>                   
+<button onclick="nextimage()">|\\\\\\\      `.</button>                 
+<button onclick="nextimage()">|\\\\\\\\       `.</button>               
+<button onclick="nextimage()">|\\\\\\\\\        `.</button>             
+<button onclick="nextimage()">|\\\\\\\\\\         `.</button>           
+<button onclick="nextimage()">|\\\\\\\\\\\__________`.</button>         
+<button onclick="nextimage()">|\\\\\\\\\\/##########F´</button>         
+<button onclick="nextimage()">|\\\\\\\\\/#########F´</button>           
+<button onclick="nextimage()">|\\\\\\\\/########F´</button>             
+<button onclick="nextimage()">|\\\\\\\/#######F´</button>               
+<button onclick="nextimage()">|\\\\\\/######F´</button>                 
+<button onclick="nextimage()">|\\\\\/#####F´</button>                   
+<button onclick="nextimage()">|\\\\/####F´</button>                     
+<button onclick="nextimage()">|\\\/###F´</button>                       
+<button onclick="nextimage()">|\\/##F´</button>                         
+<button onclick="nextimage()">|\/#F´</button>                           
+<button onclick="nextimage()">|/F´</button>                             
+<button onclick="nextimage()">|/</button>                               
+</div><div id="center" ><img id="thegif1" src="gfs/1.gif" class="center"></div>
+</div>
+                   
+                   
+                   
+                   
+                   
+                   
+                   
+                              ________________________________________________________________________________________________________________________________________
+                             /                                                                                                                                        \
+                            /                                                                                                                                          \
+                           /           <button onclick="tile()">:::</button>                                                 <span id="dropcounter">         </span>                                                      <button onclick="zoom()">&lt; &gt;</button>           \
+                          /                                                                                                                                              \
+                         /________________________________________________________________________________________________________________________________________________\                         
+
+
+                         
+
+</div>
+<script>
+  urlin=window.location.search;
+  params = new URLSearchParams(urlin);
+  n=0;
+  if(params.has('e')){
+    e=params.get('e');
+  }else{
+    e="plain";
+  }
+  if(params.has('n')){
+    n=parseInt(params.get('n'));
+  }else{
+    n=1;
+  }
+  document.getElementById('thegif').src="gfs/"+n.toString()+".gif";
+  untile();
+  env(e);
+  document.getElementById("counter").innerHTML = n.toString().padStart(4," ")+"/"+totalgifs.toString().padEnd(4," ");
+  document.getElementById("dropcounter").innerHTML = n.toString().padStart(4," ")+"/"+totalgifs.toString().padEnd(4," ");
+</script>
+</body>
+</html>

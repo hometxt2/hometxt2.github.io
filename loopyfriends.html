@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+
+<html>
+ <title id=name>home.txt</title>
+ <head>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Inconsolata&display=swap">
+    <style>
+
+     
+      body {
+        font-family: 'Inconsolata', monospace;
+        font-size: 11px;
+      }
+      a:link, a:visited {
+  	    text-decoration: none;
+	      line-height: 1;
+	      white-space:pre;
+      }
+
+      button {
+        font-family: 'Inconsolata', monospace;
+        font-size: 11px;
+        background: none;
+        border: 0;
+        padding: 0;
+        line-height: 1;
+        text-decoration: none;
+        white-space:pre;
+        cursor: pointer;
+      }
+.center {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 600px;
+}
+      #container{width:100%;margin: auto;}
+#left{float:left;width:240px;}
+#right{float:right;width:240px;}
+#center{margin:0 auto;width:600px;
+  height:700px;
+  display: flex; 
+  justify-content: center;
+  align-items: center;
+  }
+
+    </style>
+    <style id="textcolor">
+       button, a:link, a:visited {color: black;}
+    </style>
+
+
+    <script>
+      totalgifs=8;
+      var preloadimage=new Image();
+      function env(e) {
+        envs=["Loud Cloud Puffin Proud","Meme Lord Hollow Gourd","Rave Saver Dave Mushroom","Third Eye Wise Guy","Big Blossom Come And Get Some","Math Alien Hyper Sapien","Bliss Mistress Kiss Paradise","Stone Starer Star Stepper","Loopy Friends :)"];
+	      select=parseInt(e);
+        txtcolor=["black","black","black","black","black","black","black","black","black"][select];
+        maincolor=["#97effd","#dfe6ff","#dfe6ff","#deffe0","#deffe0","#dfe6ff","#ede4c7","#dfe6ff","#ffffff"][select];
+
+        document.getElementById("edge").style.backgroundColor = maincolor;
+        document.getElementById("main").style.backgroundColor = maincolor;
+        document.getElementById("main").style.color = txtcolor;
+        document.getElementById("player").style.color = maincolor;
+        document.getElementById("name").innerHTML = envs[e];
+        document.getElementById("textcolor").innerHTML = "a:link, a:visited, button {color: "+txtcolor+";}";
+        history.replaceState({ additionalInformation: ':)' },":D" , "loopyfriends?e="+e+"&n="+n);
+     }
+
+
+
+
+     function nextimage(){
+        if(n<totalgifs){
+          n=n+1;
+        }else{
+          n=1;
+        }
+        env(n-1);
+        document.getElementById('thegif').src="lfs/"+n.toString()+".jpg";
+        document.getElementById('player').src="lfs/"+n.toString()+".wav";
+        history.replaceState({ additionalInformation: ':)' },":D" , "loopyfriends?e="+e+"&n="+n);
+     }
+     function previmage(){
+        if(n>1){
+          n=n-1;
+        }else{
+          n=8;
+        }
+        env(n-1);
+        document.getElementById('thegif').src="lfs/"+n.toString()+".jpg";
+        document.getElementById('player').src="lfs/"+n.toString()+".wav";
+        history.replaceState({ additionalInformation: ':)' },":D" , "loopyfriends?e="+e+"&n="+n);
+     }
+     function start(){
+        document.getElementById("main").style.display="";
+        document.getElementById("container").style.display="";
+        document.getElementById("center").style.display="";
+        document.getElementById("player").style.display="";
+        document.getElementById("thegif").style.display="";
+        document.getElementById("left").style.display="";
+        document.getElementById("right").style.display="";
+        document.getElementById("title").style.display="none";
+        nextimage();
+     }
+
+    </script>
+ </head>
+
+<body id="edge"  style="background-color:#f7feff;margin:0; padding:0;-webkit-appearance: none;-moz-appearance: none;appearance: none;">
+<div id="main" style="width:1080px;line-height: 1;white-space:pre; auto; background-color:white;min-height:100vh;margin-right: auto; margin-left:auto;">
+<div id="container">
+<div id="left"> 
+  
+   
+  
+
+  
+  
+  
+  
+ 
+          
+  
+  
+ 
+  
+ 
+          
+ 
+ 
+ 
+ 
+ 
+ 
+                               <button onclick="previmage()">/|</button>
+                             <button onclick="previmage()">.´ |</button>
+                           <button onclick="previmage()">.´   |</button>
+                         <button onclick="previmage()">.´     |</button>
+                       <button onclick="previmage()">.´       |</button>
+                     <button onclick="previmage()">.´         |</button>
+                   <button onclick="previmage()">.´           |</button>
+                 <button onclick="previmage()">.´             |</button>
+               <button onclick="previmage()">.´               |</button>
+             <button onclick="previmage()">.´                 |</button>
+           <button onclick="previmage()">.´                   |</button>
+         <button onclick="previmage()">.´                     |</button>
+         <button onclick="previmage()">`.                     |</button>
+           <button onclick="previmage()">`.                   |</button>
+             <button onclick="previmage()">`.                 |</button>
+               <button onclick="previmage()">`.               |</button>
+                 <button onclick="previmage()">`.             |</button>
+                   <button onclick="previmage()">`.           |</button>
+                     <button onclick="previmage()">`.         |</button>
+                       <button onclick="previmage()">`.       |</button>
+                         <button onclick="previmage()">`.     |</button>
+                           <button onclick="previmage()">`.   |</button>
+                             <button onclick="previmage()">`. |</button>
+                               <button onclick="previmage()">\|</button>
+
+  </div>
+  <div id="right" style="text-align: right;" >  
+ 
+  
+ 
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+
+<button onclick="nextimage()">|\</button>                               
+<button onclick="nextimage()">| `.</button>                             
+<button onclick="nextimage()">|   `.</button>                           
+<button onclick="nextimage()">|     `.</button>                         
+<button onclick="nextimage()">|       `.</button>                       
+<button onclick="nextimage()">|         `.</button>                     
+<button onclick="nextimage()">|           `.</button>                   
+<button onclick="nextimage()">|             `.</button>                 
+<button onclick="nextimage()">|               `.</button>               
+<button onclick="nextimage()">|                 `.</button>             
+<button onclick="nextimage()">|                   `.</button>           
+<button onclick="nextimage()">|                     `.</button>         
+<button onclick="nextimage()">|                     .´</button>         
+<button onclick="nextimage()">|                   .´</button>           
+<button onclick="nextimage()">|                 .´</button>             
+<button onclick="nextimage()">|               .´</button>               
+<button onclick="nextimage()">|             .´</button>                 
+<button onclick="nextimage()">|           .´</button>                   
+<button onclick="nextimage()">|         .´</button>                     
+<button onclick="nextimage()">|       .´</button>                       
+<button onclick="nextimage()">|     .´</button>                         
+<button onclick="nextimage()">|   .´</button>                           
+<button onclick="nextimage()">| .´</button>                             
+<button onclick="nextimage()">|/</button>                               
+</div>
+  <div id="center" >
+    <img id="thegif" src="lfs/1.jpg" class="center" >
+
+
+</div>
+<div class="center" >
+<audio id="player" controls AutoPlay  loop source src="lfs/1.wav" type="audio/wav" class="center" style="width:600px; color=#00ff00">
+
+</div>
+
+
+</div>
+  </div>
+
+
+
+<div id="title" style="width:400px;line-height: 1;white-space:pre; auto; background-color:white;min-height:100vh;margin-right: auto; margin-left:auto;">
+<button onclick="start()">                                                                         
+                                                                         
+                                                                         
+                                                                         
+                                                                         
+                                                                         
+                                                                         
+                                                                         
+                                                                         
+                                                                         
+                                                                         
+                                                                         
+                                                                         
+                             8 loopy friends                             
+                     rendered from drawings in 2018                      
+                           too fun to be lamed                           
+                         too free to be chained                          
+                         listen to their sounds                          
+                        and u will be entertained                        
+                                                                         
+                                                                         
+                                                                         
+                                                                         
+                                                                         
+                                                   :)                    
+                                                   \|/                   
+____________________________________________________|____________________
+                                                   / \                   
+                                                                         
+                                                                         
+                                                                         
+                                                                         
+                                                                         
+                                                                         
+                                                                         
+                                                                         
+                                                                         
+                                                                         
+                                                                         
+                                                                         
+                                                                         </button>
+</div> 
+</div>
+<script>
+  urlin=window.location.search;
+  params = new URLSearchParams(urlin);
+  //n=0;
+  if(params.has('e')){
+    e=parseInt(params.get('e'));
+  }else{
+    e=1;
+  }
+  if(params.has('n')){
+    n=parseInt(params.get('n'));
+  }else{
+    n=9;
+  }
+  document.getElementById('thegif').src="lfs/"+n.toString()+".jpg";
+  document.getElementById('player').src="lfs/"+n.toString()+".wav";
+  env(n-1);
+  if(n==9){
+
+        document.getElementById("main").style.display="none";
+        document.getElementById("container").style.display="none";
+        document.getElementById("center").style.display="none";
+        document.getElementById("player").style.display="none";
+        document.getElementById("thegif").style.display="none";
+        document.getElementById("left").style.display="none";
+        document.getElementById("right").style.display="none";
+
+
+  }else{
+
+        document.getElementById("title").style.display="none";
+
+  }
+
+</script>
+</body>
+</html>
