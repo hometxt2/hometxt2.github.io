@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Inconsolata&display=swap">
+    <style>
+
+     
+      body {
+        font-family: 'Inconsolata', monospace;
+        font-size: 8px;
+      }
+      a:link, a:visited {
+        text-decoration: none;
+          line-height: 1;
+          white-space:pre;
+      }
+
+      button {
+        font-family: 'Inconsolata', monospace;
+        font-size: 8px;
+        background: none;
+        border: 0;
+        padding: 0;
+        line-height: 1;
+        text-decoration: none;
+        white-space:pre;
+        cursor: pointer;
+      }
+
+
+
+    </style>
+    <style id="textcolor">
+       button, a:link, a:visited {color: black;}
+    </style>
+
+    <script>
+            totaltexts=5;
+      function env(name) {
+        e=name;
+        envs=["plain","night","ufo","bluescreen","dark","electric","seafoam","peach","electric lizard","vampire"];
+        select=envs.indexOf(e);
+        txtcolor=["black","#ffcfc2","#00ff00","#ffffff","#404040","#000000","#0062ff","#ffae00","#00ba28","#000000"][select];
+        maincolor=["#ffffff","#1b0f2b","#000000","#0000ff","#000000","#ffff00","#00ffa6","#fceae8","#4dff00","#900000"][select];
+        edgecolor=["#f7feff","#514187","#ff0000","#c3c3c3","#040404","#000000","#00eaff","#fcfbd2","#bfff00","#292929"][select];
+        document.getElementById("edge").style.backgroundColor = edgecolor;
+        for(i=0;i<totaltexts;i++){
+              document.getElementById("text"+i.toString()).style.backgroundColor = maincolor;
+              document.getElementById("text"+i.toString()).style.color = txtcolor;
+        }
+        document.getElementById("textcolor").innerHTML = "a:link, a:visited, button {color: "+txtcolor+";}";
+        
+        history.replaceState({ additionalInformation: ':)' },":D" , "lappy?e="+e);
+     }
+
+
+
+
+     function changetxt(n){
+    for (i = 0; i < totaltexts; i++) {
+           if (n!==i){
+              document.getElementById("text"+i.toString()).style.display = "none";
+           }else{
+              document.getElementById("text"+i.toString()).style.display = "";
+           }
+        } 
+     }
+
+     function drop(e){
+           //changetxt(0);
+           env(e);
+     }
+    </script>
+</head>
+<body id="edge" style="background-color:#f7feff;margin:0; padding:0;-webkit-appearance: none;-moz-appearance: none;appearance: none;">
+
+<div id="text0" style="width:1150px;line-height: 1;white-space:pre; auto; background-color:white;min-height:100vh;margin-right: auto; margin-left:auto; ">
+    <pre id="screen"></pre>
+
+    <script>
+        const tablewidth=160;
+        const tablelength=22;
+        const tableheight=35;
+        const marks=[["_",1,0,2],["`-.",3,1,3],["`.",2,1,3],["\\",1,1,3],["|",0,1,3],["/",-1,1,4],[".´",-2,1,4],[".-´",-3,1,4],["_",-1,0,1],["`-.",-3,-1,1],["`.",-2,-1,1],["\\",-1,-1,1],["|",0,-1,2],["/",1,-1,2],[".´",2,-1,2],[".-´",3,-1,2]];
+        const width = tablewidth+tablelength+50;
+        const height = tablelength+tableheight+50;
+        damage=0.5
+        difficulty=0
+        let x = 25, y = 5;
+        prevx=x
+        prevy=y
+        pressed="d";
+        directionpressed="d";
+        ouch=false
+        patharray=[0]
+        startdir=5
+        let dx = 1, dy = 1;
+        let autoMove = true;
+        let clickMarker = null;
+
+        const printerhead = [
+            "     .---.                ",
+            "   .´f\\f/f\\             ",
+            "  _}=_={-={___            ",
+            " /f}=_={-={ff/\\          ",
+            "/__}=_={____/ff|          ",
+            "|ff}=_={ffff|ff|          ",
+            "|ff}=_={ffff|ff|          ",
+            "|ff}=_={ffff|(f| ",
+            "|ff}=_={ffff|ff|",
+            "|ff}=_={ffff|(/",
+            "|ff}=_={ffff|/            ",
+            "'--}=_={----'             ",
+            "   }=_={                  ",
+            "   }=_={                  ",
+            "   }=_={                  ",
+            "   }=_={                  ",
+            "   }=_={                  ",
+            "   //|\\\\                "
+        ];
+
+        const screen = document.getElementById("screen");
+
+        function printerheadeffects(){
+
+            if(ouch){
+                printerhead
+
+
+            }
+
+
+
+        }
+        function draw() {
+            let buffer = [];
+
+            //,-1,-1,-1,1,1,1,1,1,1,1,1,1,1,1,-1,-1,-1,1,1,-1,-1,1,1,1,1,1,-1,1,1,1]
+
+            // Create blank background with optional click marker
+
+            buffer=Array(height).fill(" ".repeat(width+7));
+
+            //add horizon
+            buffer[tableheight+17]="_".repeat(width+7)
+
+            if (patharray.length>400){
+                //startdir=startdir+patharray[0];
+
+                //newloc=drillpath(x,y,startdir+patharray[0],buffer)
+                newloc=drawthepath(x+59,y+18,[patharray[0]],[],tablewidth,tablelength,startdir)
+                x=newloc[0]-59
+                y=newloc[1]-18
+                startdir=patharray[0]+startdir
+                console.log("Value is:", [x+59,y+18,startdir]);
+                patharray.shift();
+            }
+            // Overlay the ASCII image
+            //buffer = overlayASCII(buffer, leg(tableheight), 0+legsoffsetx, tablelength+legsoffsety);
+            //buffer = overlayASCII(buffer, leg(tableheight), tablelength+tablewidth+legsoffsetx,0+legsoffsety);
+            //buffer = overlayASCII(buffer, leg(tableheight), tablelength+legsoffsetx, 0+legsoffsety);
+            //buffer = overlayASCII(buffer, leg(tableheight), tablewidth+legsoffsetx,tablelength +legsoffsety);
+            //buffer = overlayASCII(buffer, front(tablewidth+tableextrawid), 0,tablelength );
+            //buffer = overlayASCII(buffer, topp(tablewidth+tableextrawid,tablelength), 0,tablelength );
+            //buffer = overlayASCII(buffer, tablee(tablewidth,tablelength,tableheight), 0,0 );
+            buffer = overlayASCII(buffer, damagecounter(damage), 0,0 );
+            buffer = overlayASCII(buffer, fulltable(tablewidth,tablelength,tableheight,x,y,patharray,startdir), 0,0 );
+            buffer=ftospace(buffer);
+            //buffer = drillpath(70,25,5,buffer)[3];
+            //drilling=[70,25,2,buffer]
+            //for (let i = 0; i < 30; i++) {
+              //  drilling= drillpath(drilling[0],drilling[1],drilling[2]+patharray[i],drilling[3]);
+
+            //}
+            //buffer=drawthepath(70,25,patharray,buffer)[3]
+            //buffer=drilling[3]
+            //buffer = overlayASCII(buffer, fulltable(tablewidth,tablelength,tableheight,drilling[0],drilling[1]), 0,0 );
+
+
+
+
+            //buffer = overlayASCII(buffer, printerhead, x, y);
+
+            //screen.textContent = buffer.join("\n");
+            screen.innerHTML = buffer.join("<br>");
+        }
+        function brush(x,prevx,y,prevy){
+            if(Math.abs(x-prevx)<2&&!(y-prevy==0)){
+                return ["//|\\\\"]
+            }else if(x-prevx<0){
+
+                return ["\\\\\\\\\\"]
+
+            }else{
+                return ["/////"]
+
+
+            }
+
+
+
+        }
+
+        //locx,locy,sprite#,dirchange,dir, nlocx,nlocy
+        function makeactionlist(locx,locy,dir,dirchange,wid,len){
+
+            if(direction<2){
+                direction=direction+(parseInt(-direction)+5)*16;
+            }
+            mark=marks[direction%16]
+            if(mark[3]==1){
+                locx=locx-mark[0].length
+            }else if(mark[3]==2){
+
+            }else if(mark[3]==3){
+                locy=locy+1
+            }else if(mark[3]==4){
+                locy=locy+1
+                locx=locx-mark[0].length
+            }
+
+            //image=overlaySingleLine(image, mark[0], locx,locy);
+
+            nlocx=locx
+            nlocy=locy
+            if(mark[3]==1){
+                nlocx=nlocx+mark[0].length
+            }else if(mark[3]==2){
+                
+            }else if(mark[3]==3){
+                nlocy=nlocy-1
+            }else if(mark[3]==4){
+                nlocy=nlocy-1
+                nlocx=nlocx+mark[0].length
+            }
+            nlocx=nlocx+mark[1];
+            nlocy=nlocy+mark[2];
+
+            //drilling[1]=20
+            if(nlocy<15){
+                nlocy=15
+                damage=damage+0.1
+                ouch=true
+            }else if(nlocy>24+len){
+                nlocy=24+len
+                damage=damage+0.1
+                ouch=true
+                
+            }
+            if(nlocx<48-nlocy+19){
+                nlocx=48-nlocy+19
+                damage=damage+0.1
+                ouch=true
+            
+            }else if(nlocx>48-nlocy+26+wid){
+                nlocx=48-nlocy+26+wid
+                damage=damage+0.1
+                ouch=true
+            }
+            return [locx,locy,direction,dirchange,dir, nlocx,nlocy]
+
+
+
+        }
+
+        function doaction(actlst,image){
+
+            mark=marks[actlst[2]%16]
+            image=overlaySingleLine(image, mark[0], actlst[0],actlst[1]);
+        }
+
+       
+
+        function tablee(wid,len,hei){
+            offsetx=12
+            offsety=14
+            legsoffsetx=4;
+            legsoffsety=8;
+            legsextralen=6;
+            tablelegextrawid=7;
+            tablelegextralen=10;
+            tabletopextrawid=10
+            canvas=Array(len*5).fill(" ".repeat(wid*5));
+
+            canvas = overlayASCII(canvas, leg(hei), 0+legsoffsetx+offsetx, len+legsoffsety+tablelegextralen+offsety);
+            canvas = overlayASCII(canvas, leg(hei), len+wid+legsoffsetx+tablelegextralen+offsetx,legsoffsety+offsety);
+            canvas = overlayASCII(canvas, leg(hei), len+legsoffsetx+tablelegextralen+offsetx, legsoffsety+offsety);
+            canvas = overlayASCII(canvas, leg(hei), wid+legsoffsetx+offsetx,len +legsoffsety+tablelegextralen+offsety);
+            canvas = overlayASCII(canvas, topp(wid+tabletopextrawid,len), offsetx,offsety);
+
+            return canvas
+        }
+
+
+        function cable(len){
+            result=[];
+            result.push('='.repeat(len)+"..");
+            result.push(' '.repeat(len+1)+"))");
+            result.push('='.repeat(len)+"´´");
+            return result
+
+        }
+        function cableleft(len){
+            result=[]
+            result.push('='.repeat(len))
+            return result
+        }
+        function fulltable(wid,len,hei,x,y,patharray,firstdir){
+            bridgeextrawid=23
+            bridgeoffsetx=0
+            bridgeoffsety=28
+            //canvas=tablee(wid,len,hei);
+            bridgey=y-18
+            headoffsetx=10
+            headoffsety=1
+            brushoffsetx=13
+            brushoffsety=18
+
+            cableoffsetx=24;
+            cableoffsety=8;
+
+            cableleftoffsetx=5;
+            cableleftoffsety=28;
+
+
+            drawadjustx=59
+            drawadjusty=18
+            canvas=Array(len*5).fill(" ".repeat(wid*5));
+
+            drawnpath=drawthepath(x+drawadjustx,y+drawadjusty,patharray,canvas,wid,len,firstdir)
+            x=drawnpath[0]+len+drawnpath[1]-drawadjustx-drawadjusty
+            y=drawnpath[1]-drawadjusty
+
+            bridgey=y-18
+
+
+            canvas = overlayASCII(canvas, bridgeback(wid+bridgeextrawid), len-bridgey+bridgeoffsetx-2, bridgey+bridgeoffsety);
+            canvas = overlayASCII(canvas, tablee(wid,len,hei), 0,0)
+
+            canvas=overlayASCII(canvas, drawnpath[2],0,0);
+
+            canvas = overlayASCII(canvas, bridgefront(wid+bridgeextrawid), len-bridgey+bridgeoffsetx, bridgey+bridgeoffsety);
+
+            canvas = overlayASCII(canvas, cableleft(x), len-bridgey+cableleftoffsetx,bridgey+cableleftoffsety);
+            canvas = overlayASCII(canvas, printerhead, x+headoffsetx+len-y, y+headoffsety);
+            canvas = overlayASCII(canvas, brush(x,prevx,y,prevy), x+brushoffsetx+len-y, y+brushoffsety);
+            prevx=x
+            prevy=y
+            canvas = overlayASCII(canvas, cable(parseInt(wid/2-x/2+10)), x+cableoffsetx+len-y, y+cableoffsety);
+
+            //canvas=overlayASCII(canvas, drawnpath[2],0+5,0+18);
+
+            //canvas=ftospace(canvas);
+            return canvas
+
+        }
+        function damagecounter(damage){
+            barlen=50;
+            dam=parseInt(damage*barlen);
+            return(["|"+'#'.repeat(dam)+' '.repeat(barlen-dam)+"|"])
+
+        }
+        function leg(height){
+            leghold=[];
+            for (let x = 0; x < height; x++) {
+                leghold.push("|ff|ff|ff|ff|");
+            }
+            leghold.push("|ff|ff|ff|ff/","|__.--.__|.´ ");
+            return(leghold);
+        }
+        function drawthepath(locx,locy,dirs,image,wid,len,firstdir){
+            drilling=[locx,locy,firstdir,image]
+            for (let i = 0; i < dirs.length; i++) {
+                drilling= drillpath(drilling[0],drilling[1],drilling[2]+dirs[i],drilling[3]);
+                //48,13
+
+                //drilling[1]=20
+                if(drilling[1]<15){
+                    drilling[1]=15
+                    if(i==dirs.length-1&&i!=0){
+                        damage=damage+0.1
+                        ouch=true
+                    }
+                }else if(drilling[1]>24+len){
+                    drilling[1]=24+len
+                    if(i==dirs.length-1&&i!=0){
+                        damage=damage+0.1
+                        ouch=true
+                    }
+                }
+                if(drilling[0]<48-drilling[1]+19){
+                    drilling[0]=48-drilling[1]+19
+                    if(i==dirs.length-1&&i!=0){
+                        damage=damage+0.1
+                        ouch=true
+                    }
+                }else if(drilling[0]>48-drilling[1]+26+wid){
+                    drilling[0]=48-drilling[1]+26+wid
+                    if(i==dirs.length-1&&i!=0){
+                        damage=damage+0.1
+                        ouch=true
+                    }
+                }
+            }
+            return [drilling[0],drilling[1],drilling[3]]
+
+        }
+        function drillpath(locx,locy,direction,image){
+            //return image
+            if(direction<2){
+                direction=direction+(parseInt(-direction)+5)*16;
+            }
+            mark=marks[direction%16]
+            //dirrs=[1,1,-1,1,1,-1,-1,-1,-1,1,1,1,1,1,-1,-1,1,1,1,1,1-1,-1,-1,1,-1,1,-1,1-1,-1,-1,-1,-1,1,1,1,1,1,-1,-1,-1,1,1,1,-1,-1,-1,1,-1,1,-1,-1,1,1,1,-1,-1,1];
+            if(mark[3]==1){
+                locx=locx-mark[0].length
+            }else if(mark[3]==2){
+
+            }else if(mark[3]==3){
+                locy=locy+1
+            }else if(mark[3]==4){
+                locy=locy+1
+                locx=locx-mark[0].length
+            }
+            image=overlaySingleLine(image, mark[0], locx,locy);
+            if(mark[3]==1){
+                locx=locx+mark[0].length
+            }else if(mark[3]==2){
+                
+            }else if(mark[3]==3){
+                locy=locy-1
+            }else if(mark[3]==4){
+                locy=locy-1
+                locx=locx+mark[0].length
+            }
+            locx=locx+mark[1];
+            locy=locy+mark[2];
+
+            return [locx,locy,direction,image]
+
+
+        }
+
+
+        function bridgefront(len){
+            result=[];
+            result.push("     "+'-'.repeat(len-2)+".")
+            result.push("    "+'-'.repeat(len-3)+".f|")
+            result.push("        "+'f'.repeat(len-7)+"|f|")
+            result.push("     "+'-'.repeat(len-8)+".fff|f|")
+            result.push("       "+' '.repeat(len-10)+"|fff|f|")
+            result.push("       "+' '.repeat(len-10)+"|fff|f|")
+            result.push("        "+' '.repeat(len-11)+"|fff|ff\\")
+            result.push("         "+' '.repeat(len-12)+"|fff|fff\\")
+            result.push("         "+' '.repeat(len-12)+"|fff|fff/")
+            result.push("        "+' '.repeat(len-11)+"|fff|ff/")
+            result.push("       "+' '.repeat(len-10)+"|fff|f/")
+            result.push("      "+' '.repeat(len-9)+"|___|/")
+            return(result);
+        }        
+
+        function bridgeback(len){
+            result=[];
+            result.push("     ..");
+            result.push("  .-//");
+            result.push("  |||");
+            result.push("  | \\\\ .");
+            result.push("  |  )) |");
+            result.push("  !.´´| |");
+            result.push("//|   |  \\");
+            result.push("\\\\|   |   \\");
+            result.push(" \\|fff|fff/");
+            result.push("  |fff|ff/");
+            result.push("  |fff|f/");
+            result.push("  |___|/");
+            return(result);
+        }
+
+        function topp(wid,hei){
+            result=[];
+            //return(result);
+            result.push(' '.repeat(hei+15)+'_'.repeat(wid+4));
+            backcorner=["/f///f/ffffff|","/f///f/fffff|","/f///f/ffff|","/f///f/fff|","/f///f/ff|","/f///f/f|","/f///f/|","/f///\\ ","/f/_","/f/","/|"]
+            for (let y = 0; y < 11; y++) {
+                result.push(' '.repeat(hei+14-y)+"/"+'f'.repeat(wid+4)+backcorner[10-y])
+            }
+            line="/"+'f'.repeat(wid+4)+"/f///f/fffffff/"
+            for (let y = 0; y < hei; y++) {
+
+                result.push(' '.repeat(hei-y+3)+line);
+            }
+            //return(result);
+            result=result.concat(front(wid));
+            return result;
+
+        }
+        function front(wid){
+            fronthold=["   /__","  |_  ","   _| ","  |__"," /___","|ffff","|ffff","|ffff","|ffff","|ffff","|ffff","|____"];
+            lines=[0,3,4,11]
+
+            end=["__/f///f/fffffff/"," _|///f/fffffff/ ","|_f//f/fffffff/ ","___|/f/fffffff/  ","____\\/fffffff/  ","fffff|ffffff/     ","fffff|fffff/     ","fffff|ffff/     ","fffff|fff/     ","fffff|ff/     ","fffff|f/     ","_____|/     "]
+            for (let x = 0; x < wid; x++) {
+                
+                //fronthold[1].push("_")
+                for (let y = 0; y < fronthold.length; y++) {
+                    if(lines.includes(y)){
+                        fronthold[y]+="_"
+                    }else{
+
+                        fronthold[y]+="f"
+                    }
+                
+                }
+            }
+            for (let y = 0; y < fronthold.length; y++) {
+                fronthold[y]+=end[y]
+                
+            
+            }
+            return(fronthold);
+
+        }
+
+
+        function ftospace(arr){
+
+
+            return arr.map(str => str.replace(/f/g, " "))
+        }
+
+        function placecolortags(tags,image){
+
+
+        }
+
+        function overlayASCII(base, overlay, x, y) {
+            // Convert base to array of char arrays only once
+            const output = base.map(str => [...str]);
+            
+            for (let oy = 0; oy < overlay.length; oy++) {
+                const oLine = overlay[oy];
+                for (let ox = 0; ox < oLine.length; ox++) {
+                    const char = oLine[ox];
+                    if (char !== ' ') { // Skip spaces
+                        const by = y + oy;
+                        const bx = x + ox;
+                        // Boundary check
+                        if (by >= 0 && by < output.length && 
+                            bx >= 0 && bx < output[by].length) {
+                            output[by][bx] = char;
+                        }
+                    }
+                }
+            }
+            // Join lines more efficiently
+            return output.map(chars => chars.join(''));
+        }
+
+        function overlaySingleLine(base, overlay, x, y) {
+            const output = base.map(line => [...line]); // turn each line into array of chars
+
+            if (y >= 0 && y < output.length) {
+                const baseLine = output[y];
+                for (let i = 0; i < overlay.length; i++) {
+                    const bx = x + i;
+                    if (overlay[i] !== ' ' && bx >= 0 && bx < baseLine.length) {
+                        baseLine[bx] = overlay[i];
+                    }
+                }
+            }
+
+            return output.map(line => line.join(''));
+        }
+
+        function update() {
+            //patharray.push(Math.random() < 0.5 ? -1 : 1)
+            difficulty=difficulty+1
+            if (damage>0){
+                damage=damage-0.01
+            }
+            if(damage<0){
+                damage=0
+            }
+
+
+            if(pressed=="l"){
+                patharray.push(-1);
+
+            }else if(pressed=="r"){
+                patharray.push(1);
+
+            }else if(pressed=="u"){
+                if (directionpressed=="d"){
+                    patharray.push(8);
+                    directionpressed="u"
+                }
+                patharray.push(0);
+
+            }else if(pressed=="d"){
+                if (directionpressed=="u"){
+                    patharray.push(8);
+                    directionpressed="d"
+                }
+                patharray.push(0);
+            }
+            //patharray.push(1);
+            if (autoMove) {
+                //x += dx;
+                //y += dy;
+
+                //if (x <= 0 || x >= width - 1) dx *= -1;
+                //if (y <= 0 || y >= height - 1) dy *= -1;
+
+            }
+        }
+
+
+        screen.addEventListener("click", e => {
+            const rect = screen.getBoundingClientRect();
+            const clickX = Math.floor((e.clientX - rect.left) / (rect.width / width));
+            const clickY = Math.floor((e.clientY - rect.top) / (rect.height / height));
+            clickMarker = [clickX, clickY];
+        });
+
+        document.addEventListener("keydown", e => {
+            autoMove = false;
+            if (e.key === "ArrowLeft" && x > 0) pressed="l";
+            if (e.key === "ArrowRight" && x < width - 1) pressed="r";
+            if (e.key === "ArrowUp" && y > 0) pressed="u";
+            if (e.key === "ArrowDown" && y < height - 1) pressed="d";
+            draw();
+        });
+
+        let lastTime = 0;
+        function gameLoop(timestamp) {
+            if (timestamp - lastTime > 50) { // 20 FPS
+                update();
+                draw();
+                lastTime = timestamp;
+            }
+            requestAnimationFrame(gameLoop);
+        }
+        requestAnimationFrame(gameLoop);
+        urlin=window.location.search;
+        params = new URLSearchParams(urlin);
+        if(params.has('e')){
+        e=params.get('e');
+        }else{
+        e="plain";
+        }
+        env(e);
+    </script>
+</div>
+</body>
+</html>
+

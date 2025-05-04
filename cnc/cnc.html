@@ -1,0 +1,1829 @@
+<!DOCTYPE html>
+<html>
+<title>⚙️⚙️⚙️</title>
+<head>
+<link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Inconsolata&display=swap">
+    <style>
+
+     
+      body {
+        font-family: 'iosevka', monospace;
+        font-size: 9px;
+        font-feature-settings: "liga" 0, "calt" 0, "ss01" 0;
+        font-variant-ligatures: none;
+        font-weight: bold;
+      }
+      a:link, a:visited {
+        text-decoration: none;
+          line-height: 1;
+          white-space:pre;
+      }
+
+      button {
+        font-family: 'Inconsolata', monospace;
+
+        font-feature-settings: "liga" 0, "calt" 0, "ss01" 0;
+        font-variant-ligatures: none;
+        font-size: 9px;
+        background: none;
+        border: 0;
+        padding: 0;
+        line-height: 1;
+        text-decoration: none;
+        white-space:pre;
+        cursor: pointer;
+      }
+
+
+
+    </style>
+    <style id="textcolor">
+       button, a:link, a:visited {color: black;}
+    </style>
+
+    <script>
+            totaltexts=5;
+      function env(name) {
+        e=name;
+        envs=["plain","night","ufo","bluescreen","dark","electric","seafoam","peach","electric lizard","vampire"];
+        select=envs.indexOf(e);
+        txtcolor=["black","#ffcfc2","#00ff00","#ffffff","#404040","#000000","#0062ff","#ffae00","#00ba28","#000000"][select];
+        maincolor=["#ffffff","#1b0f2b","#000000","#0000ff","#000000","#ffff00","#00ffa6","#fceae8","#4dff00","#900000"][select];
+        edgecolor=["#f7feff","#514187","#ff0000","#c3c3c3","#040404","#000000","#00eaff","#fcfbd2","#bfff00","#292929"][select];
+
+        coldcolor=darkenColor(maincolor,10)
+        document.getElementById("edge").style.backgroundColor = edgecolor;
+        for(i=0;i<totaltexts;i++){
+              document.getElementById("text"+i.toString()).style.backgroundColor = maincolor;
+              document.getElementById("text"+i.toString()).style.color = txtcolor;
+        }
+        document.getElementById("textcolor").innerHTML = "a:link, a:visited, button {color: "+txtcolor+";}";
+        
+        history.replaceState({ additionalInformation: ':)' },":D" , "lappy?e="+e);
+     }
+
+
+
+
+     function changetxt(n){
+    for (i = 0; i < totaltexts; i++) {
+           if (n!==i){
+              document.getElementById("text"+i.toString()).style.display = "none";
+           }else{
+              document.getElementById("text"+i.toString()).style.display = "";
+           }
+        } 
+     }
+
+     function drop(e){
+           //changetxt(0);
+           env(e);
+     }
+    </script>
+</head>
+<body id="edge" style="background-color:#f7feff;margin:0; padding:0;-webkit-appearance: none;-moz-appearance: none;appearance: none;">
+<div id="text0" style="width:1290px;line-height: 1;white-space:pre; auto; background-color:white;min-height:100vh;margin-right: auto; margin-left:auto; ">
+<div id="screen"></div>
+
+    <script>
+        relax=false
+        lastscore=0
+        const tablewidth=160;
+        const tablelength=22;
+        const tableheight=35;
+        const marks=[["_",1,0,2],["`-.",3,1,3],["`.",2,1,3],["\\",1,1,3],["|",0,1,3],["/",-1,1,4],[".´",-2,1,4],[".-´",-3,1,4],["_",-1,0,1],["`-.",-3,-1,1],["`.",-2,-1,1],["\\",-1,-1,1],["|",0,-1,2],["/",1,-1,2],[".´",2,-1,2],[".-´",3,-1,2]];
+        const width = tablewidth+tablelength+50;
+        const height = tablelength+tableheight+50;
+        linelen=1000
+        damage=0
+        difficulty=0
+        let x = 25, y = 5;
+        prevx=x
+        prevy=y
+        pressed="d";
+        directionpressed="d";
+        ouch=false
+        gameover=false
+        lastframe=false
+        pathcurve=0
+        allshifty=10
+        direction=5
+        drawhold=Array(tablelength*2+tableheight*2).fill(" ".repeat(tablewidth*2));
+
+        colormap=Array(tablelength*2+tableheight*2).fill(" ".repeat(tablewidth*2));
+        pathtemps=Array(tablelength*2+tableheight*2).fill("0".repeat(tablewidth*2));
+        actions=[]
+
+        let dx = 1, dy = 1;
+        let autoMove = true;
+        let clickMarker = null;
+        printerhead = [
+            "     .---.                ",
+            "   .´f\\f/f\\             ",
+            "  _}=_={-={___            ",
+            " /f}=_={-={ff/\\          ",
+            "/__}=_={____/ff|          ",
+            "|ff}=_={ffff|ff|          ",
+            "|ff}=_={ffff|ff|          ",
+            "|ff}=_={ffff|(f| ",
+            "|ff}=_={ffff|ff|",
+            "|ff}=_={ffff|(/",
+            "|ff}=_={ffff|/            ",
+            "'--}=_={----'             ",
+            "   }=_={                  ",
+            "   }=_={                  ",
+            "   }=_={                  ",
+            "   }=_={                  ",
+            "   }=_={                  ",
+            "     |                   "
+            //"   //|\\\\                "
+        ];
+
+        printerhead1 = [
+            "     55555                ",
+            "   5555555555             ",
+            "  555555555555            ",
+            " 55555555555555           ",
+            "5555555555555555          ",
+            "5555555555555555          ",
+            "5555555555555555          ",
+            "5555555555555555          ",
+            "5555555555555555          ",
+            "555555555555555           ",
+            "55555555555555            ",
+            "5555555555555             ",
+            "   55555                  ",
+            "   55555                  ",
+            "   55555                  ",
+            "   55555                  ",
+            "   55555                  ",
+            "   55555                  "
+        ];
+        gameoverimage=[
+
+      "    / _  /\\  /\\/\\ | -|      /  \\\\  / | -| | )      ",
+      "    \\_/ /  \\ \\  / | -|      \\  / \\/  | -| | \\      ",
+      "                                                   ",
+      " ________________________________________________ ",
+"|ffffffffffffffffffffffffffffffffffffffffffffffff|",
+"|ffffffffffffffffffffffffffffffffffffffffffffffff|",
+"|ffYoufbrokefafdrillfbit,fthosefarentfcheap!fffff|",
+"|ffffffffffffffffffffffffffffffffffffffffffffffff|",
+"|ffffffffffffffffffffffffffffffffffffffffffffffff|",
+"|fffYourfscore:ffffffffffffffffffffffffffffffffff|",
+"|ffffffffffffffffffffffffffffffffffffffffffffffff|",
+"|fffffffffffffffffPlayfagain?ffffffffffffffffffff|",
+"|ffffffffffffffffffffffffffffffffffffffffffffffff|",
+"|ffffffffffffffffffffffffffffffffffffffffffffffff|",
+"|________________________________________________|"
+    ]
+
+
+                upscaletiles={
+            "`": ["`\\ ","   ","   "],
+            "\\": ["\\  "," \\ ","  \\"],
+            "/": ["  /"," / ","/  "],
+            "´": [" /´","   ","   "],
+            ".": ["   ","   "," * "],
+            "-": ["   ","---","   "],
+            "|": [" | "," | "," | "],
+            " ": ["   ","   ","   "],
+            "_": ["   ","   ","___"],
+            "#": ["###","###","###"],
+            "a": [" _ ","/ V","`-^"],
+            "y": ["   ","\\_/","_/ "],
+            "Y": ["\\ /"," v "," | "],
+            "o": [" _ ","/ \\","`-´"],
+            "u": ["   ","| |","`-´"],
+            "b": ["|_ ","| \\","`-´"],
+            "k": ["|  ","|_/","! !"],
+            "s": [".-.","'-.","`-´"],
+            "i": [" ","|","!"],
+            "e": [" _ ","|-`","`-´"],
+            "n": ["   ","l-.","! !"],
+            "l": ["|","|","!"],
+            "t": ["|_","| ","`-"],
+            "h": ["|  ","|-.","! !"],
+            "r": ["   ","l-.","!  "],
+            "P": ["| `","|-´","!  "],
+            "g": [" _ ","(_|"," _/"],
+            "x": [". ."," x ","´ `"],
+            "d": ["  |",".-|","`-'"],
+            "L": ["|  ","|  ","'--"],
+            ":": ["   "," * "," * "],
+            "c": [" _","/ ","`-"],
+            "f": [" _","/ ","`-"],
+            "1": [" ,  ", "´|  ", "-'- "],
+            "2": [".-. ", " .' ", "´-- "],
+            "3": [".-. ", " -( ", "`-´ "],
+            "4": [". . ", "'-| ", "  ' "],
+            "5": ["._. ", "'-. ", " -´ "],
+            "6": [" .  ", "/-. ", "`-´ "],
+            "7": ["--. ", "  / ", " ´  "],
+            "8": [".-. ", ")-( ", "'-' "],
+            "9": [".-. ", "`-/ ", " ´  "],
+            "S": ["/ \\", "`-.", "`-´"],
+            "0": [".-. ", "| | ", "`-´ "],
+            "R": ["| )","|-.","! !"],
+            "T": ["-.-"," | "," ! "],
+            "m": [" _ _ ","| | |","' ' '"],
+            "p": [" _ ","|_)","|  "],
+            "A": ["  A  "," /-\\ ","/   \\"]
+
+
+        }
+
+
+        scorenumbers=[
+    
+["   _._ ",
+ " ./ \\ ` ", 
+ "// .// \\ ",      
+ "\\ //´ // ",       
+ " `.\\_/´ "],   
+            [
+            "  ,   ",
+            " /|   ",
+            "/||   ",
+            " ||   ",
+            "_|/_  "],
+
+
+            [" _.._  ",
+            "/    \\ ",
+            "    // ",
+            "   //  ",
+            ".-´___ "],
+
+
+
+[" _.._   ",        
+"/  `.\\  ",      
+"  __//  ",     
+"    \\  ",     
+".____/  "],
+  
+             
+[",   , ",    
+"/|  || ",          
+"\\__|| ",          
+"    || ",   
+"   _|/_"],     
+            
+[" ____  ",      
+"||   ' ",    
+"||.-.  ",   
+"     \\ ",
+"`.__/´ "],    
+            
+["   ,   ",   
+"  //   ",    
+" //--. ",  
+"|(    |",   
+" `.__.´"],        
+            
+[" _..__  ",        
+"´´  `\\`,",  
+"     // ",  
+"    // ",   
+"  _//_"],    
+                 
+[" _.._ ",     
+"/´  `\\ ",      
+"\\.__./ ",      
+"/´  `\\ ",  
+"`.__.´ "],                   
+   
+[" __.._ ",            
+"/   `.\\",           
+"\\    ||",         
+" ` -// ",         
+"  _//_ "]           
+                      
+      
+        ]
+drillcloseupl=[
+"                     |fffffffffffffffffffffffffffffffff|                                      ",
+"                     |fffffffffffffffffffffffffffffffff|                                      ",
+"                     |fffffffffffffffffffffffffffffffff|                                      ",
+"                     |fffffffffffffffffffffffffffffffff|                                      ",
+"                     |fffffffffffffffffffffffffffffffff|                                      ",
+"                     |fffffffffffffffffffffffffffffffff|                                      ",
+"                     |fffffffffffffffffffffffffffffffff|                                      ",
+"                     |fffffffffffffffffffffffffffffffff|                                      ",
+"                     |fffffffffffffffffffffffffffffffff|                                      ",
+"                     |fffffffffffffffffffffffffffffffff|                                      ",
+"                     |fffffffffffffffffffffffffffffffff|                                      ",
+"                     |fffffffffffffffffffffffffffffffff|                                      ",
+"                     |fffffffffffffffffffffffffffffffff|                                      ",
+"                     |fffffffffffffffffffffffffffffffff|                                      ",
+"                     |_________________________________|                                       ",                                                          
+"                                 |fffffffff|                                                   ",  
+"                                 |_________|                                                   ",                                       
+"                                   |fffff|                                                     ",                                       
+"                                   |fffff|                                                     ",  
+"                                   |fffff|                                                     ",  
+"                                   |fffff|                                                     ",  
+"                                   |fffff|                                                      ", 
+"                                   |fffff|                                                      ",                                   
+"                                   \\fffff/                                                      ",
+"                                    \\___/                                                      ",  
+"                                     |`|                                                      ", 
+"                                     |`|                                                      ", 
+"                                     |`|                                                       ",
+"                                     |`|                                                      ", 
+"                                     |`|                                                       ", 
+"                                     |`|                                                   ",         
+"                                     |`|                                                   ",                           
+"                                     |`|                                                             ",
+"                                     `'|             ",
+"                                       '                                                     ",
+"                                                                                                ",
+"                                     \\,                                             ",
+"                                      \\´\\                                              ",
+"                                       \\´\\                                              ",
+"                                        \\´\\                                              ",
+"                                         \\´\\                                              ",
+"                                          \\´\\                                              ",
+"                                           \\´\\                                              ",
+"                                            \\´\\                                              ",
+"                                             \\´\\                                                      ",
+"                                              \\´\\                                         ",
+"                                                v                                       "     
+                                                                                            
+
+]
+
+
+drillcloseupr=[
+"                     |fffffffffffffffffffffffffffffffff|                                      ",
+"                     |fffffffffffffffffffffffffffffffff|                                      ",
+"                     |fffffffffffffffffffffffffffffffff|                                      ",
+"                     |fffffffffffffffffffffffffffffffff|                                      ",
+"                     |fffffffffffffffffffffffffffffffff|                                      ",
+"                     |fffffffffffffffffffffffffffffffff|                                      ",
+"                     |fffffffffffffffffffffffffffffffff|                                      ",
+"                     |fffffffffffffffffffffffffffffffff|                                      ",
+"                     |fffffffffffffffffffffffffffffffff|                                      ",
+"                     |fffffffffffffffffffffffffffffffff|                                      ",
+"                     |fffffffffffffffffffffffffffffffff|                                      ",
+"                     |fffffffffffffffffffffffffffffffff|                                      ",
+"                     |fffffffffffffffffffffffffffffffff|                                      ",
+"                     |fffffffffffffffffffffffffffffffff|                                      ",
+"                     |_________________________________|                                       ",                                                          
+"                                 |fffffffff|                                                   ",  
+"                                 |_________|                                                   ",                                       
+"                                   |fffff|                                                     ",                                       
+"                                   |fffff|                                                     ",  
+"                                   |fffff|                                                     ",  
+"                                   |fffff|                                                     ",  
+"                                   |fffff|                                                      ", 
+"                                   |fffff|                                                      ",                                   
+"                                   \\fffff/                                                      ",
+"                                    \\___/                                                      ",  
+"                                     |`|                                                      ", 
+"                                     |`|                                                      ", 
+"                                     |`|                                                       ",
+"                                     |`|                                                      ", 
+"                                     |`|                                                       ", 
+"                                     |`|                                                   ",         
+"                                     |`|                                                   ",                           
+"                                     |`|                                                             ",
+"                                     |'´             ",
+"                                     '                                                     ",
+"                                                                                                ",
+"                                      ,/                                               ",
+"                                    /`/                                               ",
+"                                   /`/                                                  ",
+"                                  /`/                                                     ",
+"                                 /`/                                                      ",
+"                                /`/                                                  ",
+"                               /`/                                                     ",
+"                              /`/                                                      ",
+"                             /`/                                                       ",
+"                            /`/                                                     ",
+"                             v                                   ",
+                                                                                            
+
+]
+
+bubbleleft=[
+"       __",
+"   .-´´ff",
+" .´ffffff",
+"/ffffffff",
+"|ffffffff",
+"|ffffffff",
+"|ffffffff",
+"|ffffffff",
+"|ffffffff",
+"|ffffffff",
+"|ffffffff",
+"|ffffffff",
+"|ffffffff",
+"|ffffffff",
+"|ffffffff",
+"|ffffffff",
+"|ffffffff",
+"|ffffffff",
+"|ffffffff",
+"|ffffffff",
+"|ffffffff",
+"|ffffffff",
+"|ffffffff",
+"|ffffffff",
+"|ffffffff",
+"|ffffffff",
+"|ffffffff",
+"|ffffffff",
+"|ffffffff",
+"|ffffffff",
+"|ffffffff",
+"|ffffffff",
+"|ffffffff",
+"|ffffffff",
+"|ffffffff",
+"|ffffffff",
+"\\ffffffff",                           
+" `.ffffffff",
+"   `-..__"
+
+
+]
+bubbleright=[
+
+"__ ",     
+"ff``-.",
+"ffffff`.",
+"ffffffff\\",
+"ffffffff|",
+"ffffffff|",
+"ffffffff|",
+"ffffffff|",
+"ffffffff|",
+"ffffffff|",
+"ffffffff|",
+"ffffffff|",
+"ffffffff|",
+"ffffffff|",
+"ffffffff|",
+"ffffffff|",
+"ffffffff|",
+"ffffffff|",
+"ffffffff|",
+"ffffffff|",
+"ffffffff|",
+"ffffffff|",
+"ffffffff|",
+"ffffffff|",
+"ffffffff|",
+"ffffffff|",
+"ffffffff|",
+"ffffffff|",
+"ffffffff|",
+"ffffffff|",
+"ffffffff|",
+"ffffffff|",
+"ffffffff|",
+"ffffffff|",
+"ffffffff|",
+"ffffffff|",
+"ffffffff/  ",                           
+"ffffff.´   ",
+"__..-´      "
+]
+
+
+bubbleleft=[
+"       __",
+"   .-´´ff",
+" .´ffffff",
+"/ffffffff",
+"|ffffffff",
+"|ffffffff",
+"|ffffffff",
+"|ffffffff",
+"|ffffffff",
+"|ffffffff",
+"|ffffffff",
+"|ffffffff",
+"|ffffffff",
+"|ffffffff",
+"|ffffffff",
+"|ffffffff",
+"|ffffffff",
+"|ffffffff",
+"|ffffffff",
+"|ffffffff",
+"|ffffffff",
+"|ffffffff",
+"|ffffffff",
+"|ffffffff",
+"|ffffffff",
+"|ffffffff",
+"|ffffffff",
+"|ffffffff",
+"|ffffffff",
+"|ffffffff",
+"|ffffffff",
+"|ffffffff",
+"|ffffffff",
+"|ffffffff",
+"|ffffffff",
+"|ffffffff",
+"\\ffffffff",                           
+" `.ffffffff",
+"   `-..__"
+
+
+]
+bubbleright2=[
+
+"__ ",     
+"ff``-.",
+"ffffff`.",
+"ffffffff\\",
+"ffffffff|",
+"ffffffff|",
+"ffffffff|",
+"ffffffff|",
+"ffffffff|",
+"ffffffff|",
+"ffffffff|",
+"ffffffff|",
+"ffffffff|",
+"ffffffff|",
+"ffffffff|",
+"ffffffff|",
+"ffffffff|",
+"ffffffff|",
+"ffffffff|",
+"ffffffff|",
+"ffffffff|",
+"ffffffff/  ",                           
+"ffffff.´   ",
+"__..-´      "
+]
+bubbleleft2=[
+"       __",
+"   .-´´ff",
+" .´ffffff",
+"/ffffffff",
+"|ffffffff",
+"|ffffffff",
+"|ffffffff",
+"|ffffffff",
+"|ffffffff",
+"|ffffffff",
+"|ffffffff",
+"|ffffffff",
+"|ffffffff",
+"|ffffffff",
+"|ffffffff",
+"|ffffffff",
+"|ffffffff",
+"|ffffffff",
+"|ffffffff",
+"|ffffffff",
+"|ffffffff",
+"\\ffffffff",                           
+" `.ffffffff",
+"   `-..__"
+
+
+]
+bubbleright3=[
+
+"__ ",     
+"ff``-.",
+"ffffff`.",
+"ffffffff\\",
+"ffffffff|",
+"ffffffff|",
+"ffffffff|",
+"ffffffff/  ",                           
+"ffffff.´   ",
+"__..-´      "
+]
+bubbleleft3=[
+"       __",
+"   .-´´ff",
+" .´ffffff",
+"/ffffffff",
+"|ffffffff",
+"|ffffffff",
+"|ffffffff",
+"\\ffffffff",                           
+" `.ffffffff",
+"   `-..__"
+
+
+]
+
+function replay(){
+        damage=0
+        difficulty=0
+        x = 25, y = 5;
+        prevx=x
+        prevy=y
+        pressed="d";
+        directionpressed="d";
+        ouch=false
+        gameover=false
+        lastframe=false
+        pathcurve=0
+        allshifty=10
+        direction=5
+        drawhold=Array(tablelength*2+tableheight*2).fill(" ".repeat(tablewidth*2));
+
+        colormap=Array(tablelength*2+tableheight*2).fill(" ".repeat(tablewidth*2));
+        pathtemps=Array(tablelength*2+tableheight*2).fill("0".repeat(tablewidth*2));
+        actions=[]
+
+        let dx = 1, dy = 1;
+        let autoMove = true;
+        let clickMarker = null;
+        //gameloop(0)
+}
+
+function relaxf(){
+    relax=true
+    lastscore=difficulty
+    replay()
+    difficulty=5000
+}
+
+function unrelaxf(){
+    relax=false
+    replay()
+
+}
+
+function replaceAsciiChars(imageArray, replacementChar) {
+    return imageArray.map(line =>
+        line.split('').map(c => (c === ' ' ? ' ' : replacementChar)).join('')
+    );
+}
+
+        const screen = document.getElementById("screen");
+
+
+        function wait(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+        function bubble(len){
+            tall=39
+            out=Array(tall).fill(" ".repeat(len+50))
+            out = overlayASCII(out, bubbleleft, 0,0 );
+            out = overlayASCII(out, bubbleright, len,0 );
+
+            for (let i = 0; i < tall; i++) {
+
+                out = overlayASCII(out, ["f".repeat(len-9)], 9,i );
+
+            }
+            out = overlayASCII(out, ["_".repeat(len-9)], 9,0 );
+            out = overlayASCII(out, ["_".repeat(len-9)], 9,tall-1 );
+            return out
+        }
+
+        function bubble2(len){
+            tall=24
+            out=Array(tall).fill(" ".repeat(len+50))
+            out = overlayASCII(out, bubbleleft2, 0,0 );
+            out = overlayASCII(out, bubbleright2, len,0 );
+
+            for (let i = 0; i < tall; i++) {
+
+                out = overlayASCII(out, ["f".repeat(len-9)], 9,i );
+
+            }
+            out = overlayASCII(out, ["_".repeat(len-9)], 9,0 );
+            out = overlayASCII(out, ["_".repeat(len-9)], 9,tall-1 );
+            return out
+        }
+
+
+        function bubble3(len){
+            tall=10
+            out=Array(tall).fill(" ".repeat(len+50))
+            out = overlayASCII(out, bubbleleft3, 0,0 );
+            out = overlayASCII(out, bubbleright3, len,0 );
+
+            for (let i = 0; i < tall; i++) {
+
+                out = overlayASCII(out, ["f".repeat(len-9)], 9,i );
+
+            }
+            out = overlayASCII(out, ["_".repeat(len-9)], 9,0 );
+            out = overlayASCII(out, ["_".repeat(len-9)], 9,tall-1 );
+            return out
+        }
+
+        function renderAsciiArt(lines, tileMap) {
+            // lines: array of strings (e.g., ["AB", "BA"])
+            // tileMap: mapping from characters to 3x3 ASCII tiles (arrays of 3 strings)
+
+            let resultLines = [];
+
+            for (let line of lines) {
+                let rowLines = ["", "", ""];
+
+                for (let ch of line) {
+                    let tile = tileMap[ch] || ["   ", " ? ", "   "];
+
+                    for (let i = 0; i < 3; i++) {
+                        rowLines[i] += tile[i];
+                    }
+                }
+
+                resultLines.push(...rowLines);
+            }
+
+            return resultLines;
+        }
+
+        function highlight2D(baseGrid, overlayGrid) {
+            const result = [];
+
+            for (let row = 0; row < Math.min(baseGrid.length, overlayGrid.length); row++) {
+                const baseRow = baseGrid[row];
+                const overlayRow = overlayGrid[row];
+                const line = [];
+                let currentSpan = null;
+
+                for (let col = 0; col < Math.min(baseRow.length, overlayRow.length); col++) {
+                    const b = baseRow[col];
+                    const o = overlayRow[col];
+
+                    if ("1234567890qwer".includes(b)) {
+                        let color = null;
+
+                        //if (b === "0") color =coldcolor //darkenColor(edgecolor,.1);// edgecolor//"#b0b0b0";
+                        if (b === "0") color = '<span style="color:'+coldcolor+'">';
+                        else if (b === "1") color = '<span style="color:#7B2C1F">';
+                        else if (b === "2") color = '<span style="color:#A2321F">';
+                        else if (b === "3") color = '<span style="color:#CB441E">';
+                        else if (b === "4") color = '<span style="color:#F0551F">';
+                        else if (b === "5") color = '<span style="color:#FF6B35">';
+                        else if (b === "6") color = '<span style="color:#FF5096">';
+                        else if (b === "7") color = '<span style="color:#D468C7">';
+                        else if (b === "8") color = '<span style="color:#9C7BF0">';
+                        else if (b === "9") color = '<span style="color:#5EC8FF">';
+                        else if (b === "q") color = '<span onclick="replay()" style="cursor:pointer; ">';
+                        else if (b === "w") color = '<span onclick="relaxf()" style="cursor:pointer; ">';
+                        else if (b === "e") color = '<span onclick="unrelaxf()" style="cursor:pointer; ">';
+                        else if (b === "r") color = '<span style="color:'+darkenColor(maincolor,2)+'">';
+                        else color = null;
+
+                        if (currentSpan !== color) {
+                            if (currentSpan) line.push('</span>');
+                            if (color) line.push(color);
+                            currentSpan = color;
+                        }
+                        line.push(o);
+                    } else {
+                        if (currentSpan) {
+                            line.push('</span>');
+                            currentSpan = null;
+                        }
+                        line.push(o);
+                    }
+                }
+                if (currentSpan) line.push('</span>'); // close any open span at line end
+                result.push(line.join(''));
+            }
+
+            return result;
+        }
+        //darkens or lightens
+        function darkenColor(hex, percent = 20) {
+    hex = hex.replace(/^#/, "");
+
+    if (hex.length === 3) {
+        hex = hex.split("").map(x => x + x).join("");
+    }
+
+    let r = parseInt(hex.slice(0, 2), 16);
+    let g = parseInt(hex.slice(2, 4), 16);
+    let b = parseInt(hex.slice(4, 6), 16);
+
+    // Convert to HSL
+    r /= 255;
+    g /= 255;
+    b /= 255;
+
+    const max = Math.max(r, g, b);
+    const min = Math.min(r, g, b);
+    let h, s, l = (max + min) / 2;
+
+    if (max === min) {
+        h = s = 0; // achromatic
+    } else {
+        const d = max - min;
+        s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+
+        switch (max) {
+            case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+            case g: h = (b - r) / d + 2; break;
+            case b: h = (r - g) / d + 4; break;
+        }
+        h /= 6;
+    }
+
+    // Adjust lightness
+    if (l >= 0.5) {
+        l = Math.max(0, l - percent / 100); // darken
+    } else {
+        l = Math.min(1, l + percent / 100); // lighten
+    }
+
+    // Convert back to RGB
+    function hslToRgb(h, s, l) {
+        let r, g, b;
+
+        if (s === 0) {
+            r = g = b = l; // achromatic
+        } else {
+            const hue2rgb = (p, q, t) => {
+                if (t < 0) t += 1;
+                if (t > 1) t -= 1;
+                if (t < 1 / 6) return p + (q - p) * 6 * t;
+                if (t < 1 / 2) return q;
+                if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
+                return p;
+            };
+
+            const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+            const p = 2 * l - q;
+
+            r = hue2rgb(p, q, h + 1 / 3);
+            g = hue2rgb(p, q, h);
+            b = hue2rgb(p, q, h - 1 / 3);
+        }
+
+        return [
+            Math.round(r * 255),
+            Math.round(g * 255),
+            Math.round(b * 255)
+        ];
+    }
+
+    [r, g, b] = hslToRgb(h, s, l);
+
+    return "#" + [r, g, b].map(x => x.toString(16).padStart(2, "0")).join("");
+}
+
+
+
+
+        function draw() {
+            let buffer = [];
+
+            ouch=false
+            colormap=Array(tablelength*2+tableheight*2+100).fill(" ".repeat(tablewidth*2+100));
+            if (lastframe&&!relax){
+                gameover=true
+            }
+
+            if(damage>1 && !relax){
+
+                lastframe=true
+            }
+            //,-1,-1,-1,1,1,1,1,1,1,1,1,1,1,1,-1,-1,-1,1,1,-1,-1,1,1,1,1,1,-1,1,1,1]
+
+            // Create blank background with optional click marker
+
+            buffer=Array(height).fill(" ".repeat(width+7));
+
+            //add horizon
+            buffer[tableheight+17]="_".repeat(width+7)
+
+            //colormap[tableheight+17]="_".repeat(7)+" ".repeat(width-17)+"_".repeat(7)
+
+            colormap[tableheight+17]="_".repeat(21)+" ".repeat(width-40)+"_".repeat(26)
+            //if (patharray.length>400){
+                //startdir=startdir+patharray[0];
+
+                //newloc=drillpath(x,y,startdir+patharray[0],buffer)
+              //  newloc=drawthepath(x+59,y+18,[patharray[0]],[],tablewidth,tablelength,startdir)
+              //  x=newloc[0]-59
+              //  y=newloc[1]-18
+              //  startdir=patharray[0]+startdir
+              //  console.log("Value is:", [x+59,y+18,startdir]);
+              //  patharray.shift();
+            //}
+            // Overlay the ASCII image
+            //buffer = overlayASCII(buffer, leg(tableheight), 0+legsoffsetx, tablelength+legsoffsety);
+            //buffer = overlayASCII(buffer, leg(tableheight), tablelength+tablewidth+legsoffsetx,0+legsoffsety);
+            //buffer = overlayASCII(buffer, leg(tableheight), tablelength+legsoffsetx, 0+legsoffsety);
+            //buffer = overlayASCII(buffer, leg(tableheight), tablewidth+legsoffsetx,tablelength +legsoffsety);
+            //buffer = overlayASCII(buffer, front(tablewidth+tableextrawid), 0,tablelength );
+            //buffer = overlayASCII(buffer, topp(tablewidth+tableextrawid,tablelength), 0,tablelength );
+            //buffer = overlayASCII(buffer, tablee(tablewidth,tablelength,tableheight), 0,0 );
+            //buffer = overlayASCII(buffer, [difficulty.toString()], 0,0 )
+            //buffer = overlayASCII(buffer, [speedf(difficulty).toString()], 0,1 )
+            //buffer = overlayASCII(buffer, [damage.toString()], 0,2 )
+
+
+            buffer = overlayASCII(buffer, bubble2(tablewidth), tablelength+30,0 );
+            colormap = overlayASCII(colormap, bubble2(tablewidth), tablelength+30,0 );
+
+
+            //colormap  = overlayASCII(colormap , score(), 92,4 )
+            if(relax){
+
+
+                buffer = overlayASCII(buffer,bubble3(36),112,11 )
+                colormap = overlayASCII(colormap,replaceAsciiChars(bubble3(36),"e"),112,11 )
+                buffer = overlayASCII(buffer,renderAsciiArt(["Play Again"],upscaletiles),120,15 )
+
+            }else{ 
+                buffer = overlayASCII(buffer,renderAsciiArt(["Temperature:"],upscaletiles),tablelength+35,11 );
+                buffer = overlayASCII(buffer, ["_".repeat(tablewidth-5)], tablelength+36,15 );
+                buffer = overlayASCII(buffer, damagecounter(tablewidth-5), tablelength+35,16 );
+                buffer = overlayASCII(buffer, damagecounter(tablewidth-5), tablelength+35,17 );
+                buffer = overlayASCII(buffer, damagecounter(tablewidth-5), tablelength+35,18 );
+                buffer = overlayASCII(buffer, ["-".repeat(tablewidth-5)], tablelength+36,19 );
+
+
+
+
+            }
+            
+            buffer = overlayASCII(buffer, score(), 117,3)
+            //colormap = overlayASCII(colormap, damagecounter(damage), 50,10 );
+
+            buffer = overlayASCII(buffer,renderAsciiArt(["Score:"],upscaletiles),95,5 )
+            buffer = overlayASCII(buffer,["_"],96,4 )
+
+            buffer = overlayASCII(buffer, fulltable(tablewidth,tablelength,tableheight), 0,0 );
+            colormap = overlayASCII(pathtemps,colormap, 0,0 );
+            if(gameover){
+
+                //buffer=overlayASCII(buffer,renderAsciiArt(drawhold, upscaletiles),0,0)
+                //buffer=overlayASCII(buffer,renderAsciiArt(["`/.-|_\\","´/.-|_\\"], upscaletiles),0,0)
+                //buffer=renderAsciiArt(drawhold, upscaletiles)
+                //buffer=renderAsciiArt(buffer, upscaletiles)
+
+                //coldcolor=darkenColor(maincolor,15)
+
+                buffer=Array(height).fill(" ".repeat(width+7));
+                endx=actions[actions.length-1][2]
+                endy=actions[actions.length-1][3]
+                dir=actions[actions.length-1][4]
+                wid=tablewidth
+                len=tablelength
+                locy=endy
+                locx=endx
+                mark=marks[dir%16]
+
+                if(mark[3]==1){
+                    locx=locx-mark[0].length
+                }else if(mark[3]==2){
+
+                }else if(mark[3]==3){
+                    locy=locy+1
+                }else if(mark[3]==4){
+                    locy=locy+1
+                    locx=locx-mark[0].length
+                }
+
+
+
+                endy=locy
+                endx=locx
+
+
+                //xd=actions[actions.length-1][2]+len+actions[actions.length-1][3]-drawadjustx-drawadjusty
+                //yd=actions[actions.length-1][3]-drawadjusty
+                //endx=xd+len-yd+15
+                //endy= yd+allshifty+9\
+
+                xdim=parseInt(width/6)+1
+                ydim=parseInt(height/8)+2
+
+                pathtemps = overlayASCII(pathtemps,ftospace(tablee(tablewidth,tablelength,tableheight)), 0,0 +allshifty)
+                zone=cropAsciiImage(tableanddraw(tablewidth,tablelength,tableheight),endx-xdim,endy+allshifty-ydim,endx+xdim+1,endy+allshifty+ydim)
+                zonecolor=cropAsciiImage(pathtemps,endx-xdim,endy+allshifty-ydim,endx+xdim+1,endy+allshifty+ydim)
+
+                zone=ftospace(zone);
+                zone=renderAsciiArt(zone, upscaletiles)
+                zonecolor=stretchASCII(zonecolor,3)
+                //zone = overlayASCII(zone,drillcloseupl, 67,0 )
+
+                if(tip(dir%16)=="l"){
+
+                    //return ["//|\\\\"]
+                zone = overlayASCII(zone,drillcloseupl, 70,0 )
+                zonecolor = overlayASCII(zonecolor,drillcloseupl, 70,0 )
+                }else{
+                zone = overlayASCII(zone,drillcloseupr, 89,0 )
+                zonecolor = overlayASCII(zonecolor,drillcloseupr, 89,0 )
+                    //return ["/////"]
+
+
+                }
+                //zone = overlayASCII(zone,brokenbitleft, 77,33 )
+                //buffer=Array(tablelength*2+tableheight*2+100).fill(" ".repeat(tablewidth*2+100));
+                buffer = overlayASCII(buffer,zone,0,0 )
+                zonecolor=overlayASCII(buffer,zonecolor,0,0 )
+
+                buffer = overlayASCII(buffer,ftospace(bubble(width-2)),0,63 )
+
+                zonecolor = overlayASCII(zonecolor,replaceAsciiChars(bubble(width-2),"r"),0,63 )
+                zonecolor = overlayASCII(zonecolor,ftospace(bubble(width-2)),0,63 )
+                //zonecolor = overlayASCII(zonecolor,bubble(width-2),0,63 )
+
+                buffer = overlayASCII(buffer,renderAsciiArt(["Looks like you broke another bit.. "],upscaletiles),40,70 )
+                zonecolor = overlayASCII(zonecolor,renderAsciiArt(["Looks like you broke another bit.. "],upscaletiles),40,70 )
+
+
+                scrr=parseInt(Math.pow(difficulty/100+1.6,4.5)-Math.pow(1.6,4.5)).toString()
+                //buffer = overlayASCII(buffer,renderAsciiArt(["Score:   "+parseInt(Math.pow(difficulty/100+1.6,4.5)-Math.pow(1.6,4.5)).toString().split('').join(' ')],upscaletiles),40,80 )
+                buffer = overlayASCII(buffer,["_"],99,78 )
+                buffer = overlayASCII(buffer,renderAsciiArt(["Score:   "+parseInt(Math.pow(difficulty/100+1.6,4.5)-Math.pow(1.6,4.5)).toString()],upscaletiles),98,79 )
+
+                zonecolor = overlayASCII(zonecolor,["_"],99,78 )
+                zonecolor = overlayASCII(zonecolor,renderAsciiArt(["Score:   "+parseInt(Math.pow(difficulty/100+1.6,4.5)-Math.pow(1.6,4.5)).toString()],upscaletiles),98,79 )
+                //buffer = overlayASCII(buffer,renderAsciiArt(["Score:"+"b".join(difficulty.toString())],upscaletiles),70,83 )
+                
+                buffer = overlayASCII(buffer,bubble3(36),52,88 )
+                zonecolor = overlayASCII(zonecolor,replaceAsciiChars(bubble3(36),"q"),52,88 )
+                buffer = overlayASCII(buffer,["_"],61,91 )
+                buffer = overlayASCII(buffer,renderAsciiArt(["Play Again"],upscaletiles),60,92 )
+                buffer = overlayASCII(buffer,bubble3(20),152,88 )
+                zonecolor = overlayASCII(zonecolor,replaceAsciiChars(bubble3(20),"w"),152,88 )
+                buffer = overlayASCII(buffer,["_"],161,91 )
+                buffer = overlayASCII(buffer,renderAsciiArt(["Relax"],upscaletiles),160,92 )
+
+
+
+                //buffer=drawhold
+                //buffer = overlayASCII(buffer,gameoverimage, 100,35 )
+                //buffer=renderAsciiArt(["\\.-"], upscaletiles)
+                colormap=zonecolor
+
+
+
+
+            }
+            buffer=ftospace(buffer);
+            //buffer = drillpath(70,25,5,buffer)[3];
+            //drilling=[70,25,2,buffer]
+            //for (let i = 0; i < 30; i++) {
+              //  drilling= drillpath(drilling[0],drilling[1],drilling[2]+patharray[i],drilling[3]);
+
+            //}
+            //buffer=drawthepath(70,25,patharray,buffer)[3]
+            //buffer=drilling[3]
+            //buffer = overlayASCII(buffer, fulltable(tablewidth,tablelength,tableheight,drilling[0],drilling[1]), 0,0 );
+
+
+
+
+            //buffer = overlayASCII(buffer, printerhead, x, y);
+
+            //screen.textContent = buffer.join("\n");
+            buffer=highlight2D(colormap,buffer)
+            pathtemps = pathtemps.map(str =>str.split('').map(cooldownletter).join(''));
+            screen.innerHTML = buffer.join("<br>");
+            //screen.innerHTML = colormap.join("<br>");
+        }
+
+
+
+
+
+function cropAsciiImage(image, x1, y1, x2, y2) {
+    // Ensure image is rectangular
+    const width = Math.max(...image.map(line => line.length));
+    const height = image.length;
+
+    const minX = Math.min(x1, x2);
+    const maxX = Math.max(x1, x2);
+    const minY = Math.min(y1, y2);
+    const maxY = Math.max(y1, y2);
+
+    const cropped = [];
+
+    for (let y = minY; y <= maxY; y++) {
+        let row = "";
+        for (let x = minX; x <= maxX; x++) {
+            if (y >= 0 && y < height && x >= 0 && x < image[y].length) {
+                row += image[y][x];
+            } else {
+                row += " "; // pad with space
+            }
+        }
+        cropped.push(row);
+    }
+
+    return cropped;
+}
+
+
+
+        function brush(x,prevx,y,prevy){
+
+
+            if(lastframe){
+                //return["  /  "]
+            }
+            if(lastframe&&Math.abs(x-prevx)==0&&!(y-prevy==0)){
+                //return ["//|\\\\
+                return["  /  "]
+            }else if(lastframe&&x-prevx<0){
+
+                //return ["\\\\\\\\\\"]
+                return["  \\  "]
+
+            }else if((lastframe)){
+                //return ["/////"]
+                return["  /  "]
+
+
+            }
+
+                return["  |  "]
+
+
+        }
+
+        function brush(dir){
+            if (!lastframe){
+
+                return["  |  "]
+
+            }
+            if(tip(dir)=="l"){
+
+                return["  \\  "]
+
+            }else{
+
+                return["  /  "]
+            }
+        }
+
+        function tip(dir){
+            if (dir<5 || dir>11){
+                return "r"
+            }else{
+                return "l"
+            }
+
+        }
+
+
+
+        //locx,locy,nlocx,nlocy,sprite#,dirchange,dir, 
+        function makeactionlist(locx,locy,dir,dirchange,wid,len){
+            //direction=dir
+            if(dir<2){
+                dir=dir+(parseInt(-dir)+5)*16;
+            }
+            mark=marks[dir%16]
+            if(mark[3]==1){
+                locx=locx-mark[0].length
+            }else if(mark[3]==2){
+
+            }else if(mark[3]==3){
+                locy=locy+1
+            }else if(mark[3]==4){
+                locy=locy+1
+                locx=locx-mark[0].length
+            }
+
+            //image=overlaySingleLine(image, mark[0], locx,locy);
+
+            nlocx=locx
+            nlocy=locy
+            if(mark[3]==1){
+                nlocx=nlocx+mark[0].length
+            }else if(mark[3]==2){
+                
+            }else if(mark[3]==3){
+                nlocy=nlocy-1
+            }else if(mark[3]==4){
+                nlocy=nlocy-1
+                nlocx=nlocx+mark[0].length
+            }
+            nlocx=nlocx+mark[1];
+            nlocy=nlocy+mark[2];
+
+            //drilling[1]=20
+            if(nlocy<15){
+                damage=damage+0.05*damagescale(difficulty)
+                ouch=true
+                if(damage<1 || true){
+                    nlocy=15
+                }
+            }else if(nlocy>24+len){
+                
+                damage=damage+0.05*damagescale(difficulty)
+                ouch=true
+                if(damage<1 || true){
+                    nlocy=24+len
+                }
+                
+            }
+            if(nlocx<48-nlocy+19){
+                damage=damage+0.05*damagescale(difficulty)
+                ouch=true
+                if(damage<1  || true){
+                    nlocx=48-nlocy+19
+                }
+            
+            }else if(nlocx>48-nlocy+26+wid){
+                damage=damage+0.05*damagescale(difficulty)
+                ouch=true
+                if(damage<1 || true){
+                    nlocx=48-nlocy+26+wid
+                }
+            }
+            return [locx,locy,nlocx,nlocy,dir,dirchange,dir]
+
+
+
+        }
+
+        function doaction(actlst,image){
+
+            mark=marks[actlst[4]%16]
+            image=overlaySingleLine(image, mark[0], actlst[0],actlst[1]);
+            pathdamage(pathtemps, mark[0], actlst[0],actlst[1]+allshifty)
+            pathtemps=overlaySingleLine(pathtemps, drilltemp(difficulty).toString().repeat( mark[0].length), actlst[0],actlst[1]+allshifty);
+            return image
+        }
+
+        function undoaction(actlst,image){
+
+            mark=marks[actlst[4]%16]
+            if (!(actions.slice(1, linelen).some(el => el[0] === actlst[0] && el[1] === actlst[1] && el[4]%16 === actlst[4]%16))){
+                image=maskMatchingSingleLine(image, mark[0], actlst[0],actlst[1]);
+            }
+            return image
+        }
+
+        function tablee(wid,len,hei){
+            offsetx=12
+            offsety=14
+            legsoffsetx=4;
+            legsoffsety=8;
+            legsextralen=6;
+            tablelegextrawid=7;
+            tablelegextralen=10;
+            tabletopextrawid=10
+            canvas=Array(len*2+hei*2).fill(" ".repeat(wid*2));
+
+            canvas = overlayASCII(canvas, leg(hei), 0+legsoffsetx+offsetx, len+legsoffsety+tablelegextralen+offsety);
+            canvas = overlayASCII(canvas, leg(hei), len+wid+legsoffsetx+tablelegextralen+offsetx,legsoffsety+offsety);
+            canvas = overlayASCII(canvas, leg(hei), len+legsoffsetx+tablelegextralen+offsetx, legsoffsety+offsety);
+            canvas = overlayASCII(canvas, leg(hei), wid+legsoffsetx+offsetx,len +legsoffsety+tablelegextralen+offsety);
+            canvas = overlayASCII(canvas, topp(wid+tabletopextrawid,len), offsetx,offsety);
+
+            return canvas
+        }
+
+        function score(){
+            scimg=Array(6).fill(" ".repeat(10*7));
+
+            if(relax){
+                dif=lastscore
+            }else{
+                dif=difficulty
+            }
+
+
+            digits= parseInt(Math.pow(dif/100+1.6,4.5)-Math.pow(1.6,4.5)).toString().padStart(7, '0');
+            digits = digits.toString().split('').map(Number);
+            shift=0
+            for (i = 0; i < 7; i++) {
+
+            scimg = overlayASCII(scimg, scorenumbers[digits[i]], shift,0 )
+            if(digits[i]==1){
+                shift=shift+4
+            }else{
+                shift=shift+8
+            }
+
+            }
+
+            return scimg
+
+
+        }
+
+
+        function cable(len){
+            result=[];
+            result.push('='.repeat(len)+"..");
+            result.push(' '.repeat(len+1)+"))");
+            result.push('='.repeat(len)+"´´");
+            return result
+
+        }
+        function cableleft(len){
+            result=[]
+            result.push('='.repeat(len))
+            return result
+        }
+        function fulltable(wid,len,hei){
+            bridgeextrawid=23
+            bridgeoffsetx=0
+            bridgeoffsety=28
+            //canvas=tablee(wid,len,hei);
+            bridgey=y-18
+            headoffsetx=10
+            headoffsety=1
+            brushoffsetx=13
+            brushoffsety=18
+
+            cableoffsetx=24;
+            cableoffsety=8;
+
+            cableleftoffsetx=5;
+            cableleftoffsety=28;
+
+
+            drawadjustx=59
+            drawadjusty=18
+            canvas=Array(len*2+hei*2).fill(" ".repeat(wid*2));
+
+            //drawnpath=drawthepath(x+drawadjustx,y+drawadjusty,patharray,canvas,wid,len,direction)
+
+            //actlist=makeactionlist(locx,locy,firstdir,patharray[patharray.length-1],wid,len)
+
+            if(!(lastframe||gameover)){
+                if(actions.length>linelen){
+                    drawhold=undoaction(actions[0],drawhold)
+                    actions.shift()
+
+
+                }
+
+                actlist=makeactionlist(x+drawadjustx,y+drawadjusty,direction,pathcurve,wid,len)
+
+                direction=actlist[4]+pathcurve
+                drawhold=doaction(actlist,drawhold)
+                actions.push(actlist)
+            }
+
+
+            x=actlist[2]-drawadjustx
+            y=actlist[3]-drawadjusty
+            xd=actlist[2]+len+actlist[3]-drawadjustx-drawadjusty
+            yd=actlist[3]-drawadjusty
+
+            bridgey=yd-18
+
+
+            canvas = overlayASCII(canvas, bridgeback(wid+bridgeextrawid), len-bridgey+bridgeoffsetx-2, bridgey+bridgeoffsety+allshifty);
+            canvas = overlayASCII(canvas, tablee(wid,len,hei), 0,0+allshifty)
+
+            colormap = overlayASCII(colormap,ftospace(canvas), 0,0);
+            //canvas=overlayASCII(canvas, drawnpath[2],0,0);
+            canvas=overlayASCII(canvas, drawhold,0,0+allshifty);
+
+            canvas = overlayASCII(canvas, bridgefront(wid+bridgeextrawid), len-bridgey+bridgeoffsetx, bridgey+bridgeoffsety+allshifty);
+            colormap = overlayASCII(colormap, ftospace(bridgefront(wid+bridgeextrawid)), len-bridgey+bridgeoffsetx, bridgey+bridgeoffsety+allshifty);
+
+            canvas = overlayASCII(canvas, cableleft(xd), len-bridgey+cableleftoffsetx,bridgey+cableleftoffsety+allshifty);
+            colormap = overlayASCII(colormap, ftospace(cableleft(xd)), len-bridgey+cableleftoffsetx,bridgey+cableleftoffsety+allshifty);
+
+
+            canvas = overlayASCII(canvas, printerhead, xd+headoffsetx+len-yd, yd+headoffsety+allshifty);
+            colormap = overlayASCII(colormap, ftospace(printerhead), xd+headoffsetx+len-yd, yd+headoffsety+allshifty);
+            if(ouch&&!relax){
+                colormap= overlayASCII(colormap, printerhead1, xd+headoffsetx+len-yd, yd+headoffsety+allshifty);
+            }
+            canvas = overlayASCII(canvas, brush(actlist[4]%16), xd+brushoffsetx+len-yd, yd+brushoffsety+allshifty);
+            prevx=x
+            prevy=y
+            canvas = overlayASCII(canvas, cable(parseInt(wid/2-xd/2+10)), xd+cableoffsetx+len-yd, yd+cableoffsety+allshifty);
+
+            colormap = overlayASCII(colormap, ftospace(cable(parseInt(wid/2-xd/2+10))), xd+cableoffsetx+len-y, yd+cableoffsety+allshifty);
+            //canvas=overlayASCII(canvas, drawnpath[2],0+5,0+18);
+
+            //canvas=ftospace(canvas);
+            return canvas
+
+        }
+
+        function tableanddraw(wid,len,hei){
+            bridgeextrawid=23
+            bridgeoffsetx=0
+            bridgeoffsety=28
+            //canvas=tablee(wid,len,hei);
+            bridgey=y-18
+            headoffsetx=10
+            headoffsety=1
+            brushoffsetx=13
+            brushoffsety=18
+
+            cableoffsetx=24;
+            cableoffsety=8;
+
+            cableleftoffsetx=5;
+            cableleftoffsety=28;
+
+
+            drawadjustx=59
+            drawadjusty=18
+            canvas=Array(len*2+hei*2).fill(" ".repeat(wid*2));
+
+            //drawnpath=drawthepath(x+drawadjustx,y+drawadjusty,patharray,canvas,wid,len,direction)
+
+            //actlist=makeactionlist(locx,locy,firstdir,patharray[patharray.length-1],wid,len)
+
+            if(!(lastframe||gameover)){
+            if(actions.length>linelen){
+                drawhold=undoaction(actions[0],drawhold)
+                actions.shift()
+
+
+            }
+
+            actlist=makeactionlist(x+drawadjustx,y+drawadjusty,direction,pathcurve,wid,len)
+
+            direction=actlist[4]+pathcurve
+            //drawhold=doaction(actlist,drawhold)
+                actions.push(actlist)
+            }
+
+
+            x=actlist[2]-drawadjustx
+            y=actlist[3]-drawadjusty
+            xd=actlist[2]+len+actlist[3]-drawadjustx-drawadjusty
+            yd=actlist[3]-drawadjusty
+
+            bridgey=yd-18
+
+
+            canvas = overlayASCII(canvas, tablee(wid,len,hei), 0,0+allshifty)
+
+            colormap = overlayASCII(colormap,ftospace(canvas), 0,0);
+            //canvas=overlayASCII(canvas, drawnpath[2],0,0);
+            canvas=overlayASCII(canvas, drawhold,0,0+allshifty);
+
+            //canvas=overlayASCII(canvas, drawnpath[2],0+5,0+18);
+
+            //canvas=ftospace(canvas);
+            return canvas
+
+        }
+        function damagecounter(barlen){
+            //barlen=100;
+            dam=Math.min(parseInt(damage*barlen),barlen);
+            return(["|"+'#'.repeat(dam)+' '.repeat(barlen-dam)+"|"])
+
+        }
+        function leg(height){
+            leghold=[];
+            for (let x = 0; x < height; x++) {
+                leghold.push("|ff|ff|ff|ff|");
+            }
+            leghold.push("|ff|ff|ff|ff/","|__.--.__|.´ ");
+            return(leghold);
+        }
+
+        
+
+
+        function bridgefront(len){
+            result=[];
+            result.push("     "+'-'.repeat(len-2)+".")
+            result.push("    "+'-'.repeat(len-3)+".f|")
+            result.push("        "+'f'.repeat(len-7)+"|f|")
+            result.push("     "+'-'.repeat(len-8)+".fff|f|")
+            result.push("       "+' '.repeat(len-10)+"|fff|f|")
+            result.push("       "+' '.repeat(len-10)+"|fff|f|")
+            result.push("        "+' '.repeat(len-11)+"|fff|ff\\")
+            result.push("         "+' '.repeat(len-12)+"|fff|fff\\")
+            result.push("         "+' '.repeat(len-12)+"|fff|fff/")
+            result.push("        "+' '.repeat(len-11)+"|fff|ff/")
+            result.push("       "+' '.repeat(len-10)+"|fff|f/")
+            result.push("      "+' '.repeat(len-9)+"|___|/")
+            return(result);
+        }        
+
+        function bridgeback(len){
+            result=[];
+            result.push("     ..");
+            result.push("  .-//");
+            result.push("  |||");
+            result.push("  |f\\\\ .");
+            result.push("  |ff))f|");
+            result.push("  !.´´|f|");
+            result.push("//|fff|ff\\");
+            result.push("\\\\|fff|fff\\");
+            result.push(" \\|fff|fff/");
+            result.push("  |fff|ff/");
+            result.push("  |fff|f/");
+            result.push("  |___|/");
+            return(result);
+        }
+
+        function topp(wid,hei){
+            result=[];
+            //return(result);
+            result.push(' '.repeat(hei+15)+'_'.repeat(wid+4));
+            backcorner=["/f///f/ffffff|","/f///f/fffff|","/f///f/ffff|","/f///f/fff|","/f///f/ff|","/f///f/f|","/f///f/|","/f///\\ ","/f/_","/f/","/|"]
+            for (let y = 0; y < 11; y++) {
+                result.push(' '.repeat(hei+14-y)+"/"+'f'.repeat(wid+4)+backcorner[10-y])
+            }
+            line="/"+'f'.repeat(wid+4)+"/f///f/fffffff/"
+            for (let y = 0; y < hei; y++) {
+
+                result.push(' '.repeat(hei-y+3)+line);
+            }
+            //return(result);
+            result=result.concat(front(wid));
+            return result;
+
+        }
+        function front(wid){
+            fronthold=["   /__","  |_ff","   _| ","  |__"," /___","|ffff","|ffff","|ffff","|ffff","|ffff","|ffff","|____"];
+            lines=[0,3,4,11]
+
+            end=["__/f///f/fffffff/"," _|///f/fffffff/ ","|_f//f/fffffff/ ","___|/f/fffffff/  ","____\\/fffffff/  ","fffff|ffffff/     ","fffff|fffff/     ","fffff|ffff/     ","fffff|fff/     ","fffff|ff/     ","fffff|f/     ","_____|/     "]
+            for (let x = 0; x < wid; x++) {
+                
+                //fronthold[1].push("_")
+                for (let y = 0; y < fronthold.length; y++) {
+                    if(lines.includes(y)){
+                        fronthold[y]+="_"
+                    }else{
+
+                        fronthold[y]+="f"
+                    }
+                
+                }
+            }
+            for (let y = 0; y < fronthold.length; y++) {
+                fronthold[y]+=end[y]
+                
+            
+            }
+            return(fronthold);
+
+        }
+
+
+        function ftospace(arr){
+
+
+            return arr.map(str => str.replace(/f/g, " "))
+        }
+
+        function stretchASCII(asciiImage, multiplier) {
+    return asciiImage.map(line => {
+        // Stretch horizontally
+        const stretchedLine = line.split('').map(char => char.repeat(multiplier)).join('');
+        
+        // Stretch vertically by repeating the stretched line
+        return Array(multiplier).fill(stretchedLine);
+    }).flat();
+}
+
+
+        function overlayASCII(base, overlay, x, y) {
+            // Convert base to array of char arrays only once
+            const output = base.map(str => [...str]);
+            
+            for (let oy = 0; oy < overlay.length; oy++) {
+                const oLine = overlay[oy];
+                for (let ox = 0; ox < oLine.length; ox++) {
+                    const char = oLine[ox];
+                    if (char !== ' ') { // Skip spaces
+                        const by = y + oy;
+                        const bx = x + ox;
+                        // Boundary check
+                        if (by >= 0 && by < output.length && 
+                            bx >= 0 && bx < output[by].length) {
+                            output[by][bx] = char;
+                        }
+                    }
+                }
+            }
+            // Join lines more efficiently
+            return output.map(chars => chars.join(''));
+        }
+
+        function overlaySingleLine(base, overlay, x, y) {
+            const output = base.map(line => [...line]); // turn each line into array of chars
+
+            if (y >= 0 && y < output.length) {
+                const baseLine = output[y];
+                for (let i = 0; i < overlay.length; i++) {
+                    const bx = x + i;
+                    if (overlay[i] !== ' ' && bx >= 0 && bx < baseLine.length) {
+                        baseLine[bx] = overlay[i];
+                    }
+                }
+            }
+
+            return output.map(line => line.join(''));
+        }
+
+
+        function pathdamage(base, overlay, x, y) {
+            const output = base.map(line => [...line]); // turn each line into array of chars
+
+            if (y >= 0 && y < output.length) {
+                const baseLine = output[y];
+                for (let i = 0; i < overlay.length; i++) {
+                    const bx = x + i;
+                    if (baseLine[bx]!="0" && !relax) {
+                        damage=damage+Math.sqrt(parseInt(baseLine[bx]))*0.012*damagescale(difficulty)
+                        ouch=true
+                    }
+                }
+            }
+
+            return
+        }
+
+
+
+
+        function maskMatchingSingleLine(base, overlay, x, y) {
+            const output = base.map(line => [...line]); // Copy base to 2D char array
+
+            if (y >= 0 && y < output.length) {
+                const baseLine = output[y];
+                for (let i = 0; i < overlay.length; i++) {
+                    const bx = x + i;
+                    if (bx >= 0 && bx < baseLine.length) {
+                        if (overlay[i] === baseLine[bx]) {
+                            baseLine[bx] = ' ';
+                        }
+                    }
+                }
+            }
+
+            return output.map(line => line.join(''));
+        }
+        function update() {
+            //patharray.push(Math.random() < 0.5 ? -1 : 1)
+            difficulty=difficulty+0.99
+            if (damage>0){
+                damage=damage-0.01//damagescale(difficulty)
+            }
+            if(damage<0){
+                damage=0
+            }
+
+
+            if(pressed=="l"){
+                pathcurve=-1;
+
+            }else if(pressed=="r"){
+                pathcurve=(1);
+
+            }else if(pressed=="u"){
+                pathcurve=(0);
+                if (directionpressed=="d"){
+                    pathcurve=(8);
+                    directionpressed="u"
+                }
+
+            }else if(pressed=="d"){
+                pathcurve=(0);
+                if (directionpressed=="u"){
+                    pathcurve=(8);
+                    directionpressed="d"
+                }
+            }
+            //patharray.push(1);
+            if (autoMove) {
+                //x += dx;
+                //y += dy;
+
+                //if (x <= 0 || x >= width - 1) dx *= -1;
+                //if (y <= 0 || y >= height - 1) dy *= -1;
+
+            }
+        }
+
+
+        screen.addEventListener("click", e => {
+            const rect = screen.getBoundingClientRect();
+            const clickX = Math.floor((e.clientX - rect.left) / (rect.width / width));
+            const clickY = Math.floor((e.clientY - rect.top) / (rect.height / height));
+            clickMarker = [clickX, clickY];
+        });
+
+        document.addEventListener("keydown", e => {
+            const keysToBlock = ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"];
+            if (keysToBlock.includes(e.key)) {
+                e.preventDefault();
+            }
+
+            autoMove = false;
+
+            switch (e.key) {
+                case "ArrowLeft":
+                    pressed = "l";
+                    break;
+                case "ArrowRight":
+                    pressed = "r";
+                    break;
+                case "ArrowUp":
+                    pressed = "u";
+                    break;
+                case "ArrowDown":
+                    pressed = "d";
+                    break;                
+                case "d":
+                    damage=2
+                    break;
+            }
+        });
+
+
+        let lastTime = 0;
+
+        function speedf(difficulty){
+            if (relax){
+                return 200
+            }
+            speed=200
+            if(lastframe){
+
+                return 1300
+            }
+            if(difficulty<40){
+                speed=400-5*difficulty
+            }else if(difficulty<140){
+
+                speed=200-1*(difficulty-40)
+
+            }else if(difficulty<540){
+
+                speed=100-0.1*(difficulty-200)
+
+            }else{
+
+                speed=50-0.005*(difficulty-540)
+
+            }
+
+            if(speed<1){
+                speed=1
+            }
+            //speed=1
+
+            return parseInt(speed)
+        }
+
+        function drilltemp(difficulty){
+            dt=parseInt(1+difficulty/150)
+            if(dt>9){
+                dt=9
+            }
+            return dt
+        }
+
+        function damagescale(difficulty){
+            return Math.min(1+difficulty/1000,3)
+        }
+
+        function cooldownletter(letter) {
+            // Check if the character is a number
+            if (letter >= '0' && letter <= '9') {
+                // Decrease the character and ensure it doesn't go below '0'
+                if(Math.random()>Math.min(.9+difficulty/10000,0.993))
+                return String.fromCharCode(Math.max(letter.charCodeAt(0) - 1, '0'.charCodeAt(0)));
+            }
+            return letter; // Return the letter as is if it's not a number
+        }
+
+
+        function gameLoop(timestamp) {
+            if (timestamp - lastTime > speedf(difficulty)) { // 20 FPS
+                if((!gameover)){
+                    update();
+                    draw();
+
+                }
+                lastTime = timestamp;
+            }
+            requestAnimationFrame(gameLoop);
+        }
+        requestAnimationFrame(gameLoop);
+        urlin=window.location.search;
+        params = new URLSearchParams(urlin);
+        if(params.has('e')){
+        e=params.get('e');
+        }else{
+        e="plain";
+        }
+        env(e);
+    </script>
+</div>
+</body>
+</html>
+
