@@ -1229,18 +1229,18 @@ function cropAsciiImage(image, x1, y1, x2, y2) {
                 }
                 
             }
-            if(nlocx<48-nlocy+19){
+            if(nlocx<48-nlocy+19+8){
                 damage=damage+0.05*damagescale(difficulty)
                 ouch=true
                 if(damage<1  || true){
-                    nlocx=48-nlocy+19
+                    nlocx=48-nlocy+19+8
                 }
             
-            }else if(nlocx>48-nlocy+26+wid){
+            }else if(nlocx>48-nlocy+26+wid-8){
                 damage=damage+0.05*damagescale(difficulty)
                 ouch=true
                 if(damage<1 || true){
-                    nlocx=48-nlocy+26+wid
+                    nlocx=48-nlocy+26+wid-8
                 }
             }
             return [locx,locy,nlocx,nlocy,dir,dirchange,dir]
