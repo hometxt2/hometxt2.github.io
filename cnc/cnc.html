@@ -667,6 +667,7 @@ function unrelaxf(){
     relax=false
     paused=false
     stopped=false
+    intuitive=false
     replay()
 
 }
@@ -947,7 +948,9 @@ function replaceAsciiChars(imageArray, replacementChar) {
 
 
                 buffer = overlayASCII(buffer,bubble3(36),152,11 )
-                colormap = overlayASCII(colormap,replaceAsciiChars(bubble3(36),"e"),162,11 )
+                colormap = overlayASCII(colormap,replaceAsciiChars(bubble3(36),"e"),152,11 )
+
+                //zonecolor = overlayASCII(zonecolor,replaceAsciiChars(bubble3(36),"q"),162,11 )
                 buffer = overlayASCII(buffer,renderAsciiArt(["Play Again"],upscaletiles),160,15 )
 
                 buffer = overlayASCII(buffer,renderAsciiArt(["Cut Time:"],upscaletiles),80,5 )
