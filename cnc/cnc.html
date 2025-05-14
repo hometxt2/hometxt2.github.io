@@ -98,11 +98,17 @@
         linelen=1000
         damage=0
         difficulty=0
+        paused=false
+        stopped=false
+        cuttime=0
         let x = 25, y = 5;
         prevx=x
         prevy=y
         pressed="d";
         directionpressed="d";
+
+        intuitive=false
+        udlr=[false,false,false,false]
         ouch=false
         gameover=false
         lastframe=false
@@ -214,6 +220,7 @@
             ":": ["   "," * "," * "],
             "c": [" _","/ ","`-"],
             "f": [" _","/ ","`-"],
+            "C": [".´  ","\\   "," `- "],
             "1": [" ,  ", "´|  ", "-'- "],
             "2": [".-. ", " .' ", "´-- "],
             "3": [".-. ", " -( ", "`-´ "],
@@ -650,12 +657,16 @@ function replay(){
 function relaxf(){
     relax=true
     lastscore=difficulty
+    intuitive=true
+    cuttime=0
     replay()
     difficulty=5000
 }
 
 function unrelaxf(){
     relax=false
+    paused=false
+    stopped=false
     replay()
 
 }
@@ -935,9 +946,17 @@ function replaceAsciiChars(imageArray, replacementChar) {
             if(relax){
 
 
-                buffer = overlayASCII(buffer,bubble3(36),112,11 )
-                colormap = overlayASCII(colormap,replaceAsciiChars(bubble3(36),"e"),112,11 )
-                buffer = overlayASCII(buffer,renderAsciiArt(["Play Again"],upscaletiles),120,15 )
+                buffer = overlayASCII(buffer,bubble3(36),152,11 )
+                colormap = overlayASCII(colormap,replaceAsciiChars(bubble3(36),"e"),162,11 )
+                buffer = overlayASCII(buffer,renderAsciiArt(["Play Again"],upscaletiles),160,15 )
+
+                buffer = overlayASCII(buffer,renderAsciiArt(["Cut Time:"],upscaletiles),80,5 )
+
+                buffer = overlayASCII(buffer,["_"],82,4 )
+                buffer = overlayASCII(buffer, cuttimeshow(), 127,3)
+                //buffer = overlayASCII(buffer, parseInt(udlr.map(b => b ? '1' : '0').join(''), 2).toString(), 117,3)
+
+
 
             }else{ 
                 buffer = overlayASCII(buffer,renderAsciiArt(["Temperature:"],upscaletiles),tablelength+35,11 );
@@ -952,13 +971,22 @@ function replaceAsciiChars(imageArray, replacementChar) {
 
             }
             
-            buffer = overlayASCII(buffer, score(), 117,3)
-            //colormap = overlayASCII(colormap, damagecounter(damage), 50,10 );
 
-            buffer = overlayASCII(buffer,renderAsciiArt(["Score:"],upscaletiles),95,5 )
-            buffer = overlayASCII(buffer,["_"],96,4 )
+            if(relax){
 
-            buffer = overlayASCII(buffer, fulltable(tablewidth,tablelength,tableheight), 0,0 );
+
+
+
+                buffer = overlayASCII(buffer,renderAsciiArt(["Score:   "+parseInt(lastscore).toString()],upscaletiles),78,15 )
+                buffer = overlayASCII(buffer,["_"],79,14 )
+                buffer = overlayASCII(buffer, fulltable(tablewidth,tablelength,tableheight), 0,0 );
+            }else{
+                buffer = overlayASCII(buffer, score(), 117,3)
+                buffer = overlayASCII(buffer,renderAsciiArt(["Score:"],upscaletiles),95,5 )
+                buffer = overlayASCII(buffer,["_"],96,4 )
+                buffer = overlayASCII(buffer, fulltable(tablewidth,tablelength,tableheight), 0,0 );
+            }
+
             colormap = overlayASCII(pathtemps,colormap, 0,0 );
             if(gameover){
 
@@ -1045,8 +1073,12 @@ function replaceAsciiChars(imageArray, replacementChar) {
                 buffer = overlayASCII(buffer,["_"],99,78 )
                 buffer = overlayASCII(buffer,renderAsciiArt(["Score:   "+parseInt(Math.pow(difficulty/100+1.6,4.5)-Math.pow(1.6,4.5)).toString()],upscaletiles),98,79 )
 
+
+
                 zonecolor = overlayASCII(zonecolor,["_"],99,78 )
+                
                 zonecolor = overlayASCII(zonecolor,renderAsciiArt(["Score:   "+parseInt(Math.pow(difficulty/100+1.6,4.5)-Math.pow(1.6,4.5)).toString()],upscaletiles),98,79 )
+
                 //buffer = overlayASCII(buffer,renderAsciiArt(["Score:"+"b".join(difficulty.toString())],upscaletiles),70,83 )
                 
                 buffer = overlayASCII(buffer,bubble3(36),52,88 )
@@ -1180,6 +1212,11 @@ function cropAsciiImage(image, x1, y1, x2, y2) {
 
         //locx,locy,nlocx,nlocy,sprite#,dirchange,dir, 
         function makeactionlist(locx,locy,dir,dirchange,wid,len){
+
+            if(stopped){
+
+                return [locx,locy,nlocx,nlocy,dir,dirchange,dir]
+            }
             //direction=dir
             if(dir<2){
                 dir=dir+(parseInt(-dir)+5)*16;
@@ -1316,6 +1353,66 @@ function cropAsciiImage(image, x1, y1, x2, y2) {
 
         }
 
+        function cuttimeshow(){
+            scimg=Array(6).fill(" ".repeat(10*7));
+
+            if(relax){
+                dif=lastscore
+            }else{
+                dif=difficulty
+            }
+
+            mins=parseInt(cuttime/(60*1000)).toString().padStart(1, '0');
+            secs= (parseInt(cuttime/1000)%60).toString().padStart(2, '0');
+            millis=parseInt(cuttime%(1000)).toString().padStart(3, '0');
+
+            secs=secs.toString().split('').map(Number);
+            mins=mins.toString().split('').map(Number);
+            millis=millis.toString().split('').map(Number);
+            shift=0
+
+            for (i = 0; i < mins.length; i++) {
+
+                scimg = overlayASCII(scimg, scorenumbers[mins[i]], shift,0 )
+                if(mins[i]==1){
+                    shift=shift+4
+                }else{
+                    shift=shift+8
+                }
+
+            }
+            scimg = overlayASCII(scimg, ["   ","   "," * ","   "," * "], shift,0 )
+            shift=shift+3
+
+            for (i = 0; i < 2; i++) {
+
+                scimg = overlayASCII(scimg, scorenumbers[secs[i]], shift,0 )
+                if(secs[i]==1){
+                    shift=shift+4
+                }else{
+                    shift=shift+8
+                }
+
+            }
+
+            scimg = overlayASCII(scimg, ["   ","   "," * ","   "," * "], shift,0 )
+            shift=shift+3
+
+            for (i = 0; i < 3; i++) {
+
+                scimg = overlayASCII(scimg, scorenumbers[millis[i]], shift,0 )
+                if(millis[i]==1){
+                    shift=shift+4
+                }else{
+                    shift=shift+8
+                }
+
+            }
+            return scimg
+
+
+        }
+
 
         function cable(len){
             result=[];
@@ -1366,17 +1463,97 @@ function cropAsciiImage(image, x1, y1, x2, y2) {
 
                 actlist=makeactionlist(x+drawadjustx,y+drawadjusty,direction,pathcurve,wid,len)
 
+                if(intuitive){
+                    pathcurve=0
+                    udlrint = parseInt(udlr.map(b => b ? '1' : '0').join(''), 2);
+                    switch (udlrint) {
+                        case 0:
+                            stopped=true
+                            break
+                        case 1:
+                            stopped=false
+                            direction=0
+                            break
+                        case 2:
+                            stopped=false
+                            direction=8
+                            break
+                        case 3:
+                            stopped=true
+                            break
+                        case 4:
+                            stopped=false
+                            direction=4
+                            break
+                        case 5:
+                            stopped=false
+                            direction=2
+                            break
+                        case 6:
+                            stopped=false
+                            direction=6
+                            break
+                        case 7:
+                            stopped=false
+                            direction=4
+                            break
+                        case 8:
+                            stopped=false
+                            direction=12
+                            break
+                        case 9:
+                            stopped=false
+                            direction=14
+                            break
+                        case 10:
+                            stopped=false
+                            direction=10
+                            break
+                        case 11:
+                            stopped=false
+                            direction=12
+                            break
+                        case 12:
+                            stopped=true
+                            break
+                        case 13:
+                            stopped=false
+                            direction=0
+                            break
+                        case 14:
+                            stopped=false
+                            direction=8
+                            break
+                        case 15:
+                            stopped=true
+                            break
+                    }
+
+                }else{
+
+
                 direction=actlist[4]+pathcurve
+                }
+
+
+                actlist=makeactionlist(x+drawadjustx,y+drawadjusty,direction,pathcurve,wid,len)
+                
+        //const marks=[["_",1,0,2],["`-.",3,1,3],["`.",2,1,3],["\\",1,1,3],["|",0,1,3],["/",-1,1,4],[".´",-2,1,4],[".-´",-3,1,4],["_",-1,0,1],["`-.",-3,-1,1],["`.",-2,-1,1],["\\",-1,-1,1],["|",0,-1,2],["/",1,-1,2],[".´",2,-1,2],[".-´",3,-1,2]];
+
+                //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                if(!stopped){
                 drawhold=doaction(actlist,drawhold)
                 actions.push(actlist)
-            }
+                }
 
+            }
 
             x=actlist[2]-drawadjustx
             y=actlist[3]-drawadjusty
             xd=actlist[2]+len+actlist[3]-drawadjustx-drawadjusty
             yd=actlist[3]-drawadjusty
-
+        
+            
             bridgey=yd-18
 
 
@@ -1406,7 +1583,7 @@ function cropAsciiImage(image, x1, y1, x2, y2) {
 
             colormap = overlayASCII(colormap, ftospace(cable(parseInt(wid/2-xd/2+10))), xd+cableoffsetx+len-y, yd+cableoffsety+allshifty);
             //canvas=overlayASCII(canvas, drawnpath[2],0+5,0+18);
-
+            
             //canvas=ftospace(canvas);
             return canvas
 
@@ -1448,11 +1625,90 @@ function cropAsciiImage(image, x1, y1, x2, y2) {
 
             actlist=makeactionlist(x+drawadjustx,y+drawadjusty,direction,pathcurve,wid,len)
 
+            if(intuitive){
+                    pathcurve=0
+                    udlrint = parseInt(udlr.map(b => b ? '1' : '0').join(''), 2);
+                    switch (udlrint) {
+                        case 0:
+                            stopped=true
+                            break
+                        case 1:
+                            stopped=false
+                            direction=0
+                            break
+                        case 2:
+                            stopped=false
+                            direction=8
+                            break
+                        case 3:
+                            stopped=true
+                            break
+                        case 4:
+                            stopped=false
+                            direction=4
+                            break
+                        case 5:
+                            stopped=false
+                            direction=2
+                            break
+                        case 6:
+                            stopped=false
+                            direction=6
+                            break
+                        case 7:
+                            stopped=false
+                            direction=4
+                            break
+                        case 8:
+                            stopped=false
+                            direction=12
+                            break
+                        case 9:
+                            stopped=false
+                            direction=14
+                            break
+                        case 10:
+                            stopped=false
+                            direction=10
+                            break
+                        case 11:
+                            stopped=false
+                            direction=12
+                            break
+                        case 12:
+                            stopped=true
+                            break
+                        case 13:
+                            stopped=false
+                            direction=0
+                            break
+                        case 14:
+                            stopped=false
+                            direction=8
+                            break
+                        case 15:
+                            stopped=true
+                            break
+                    }
+            }else{
+
+
+
+
             direction=actlist[4]+pathcurve
-            //drawhold=doaction(actlist,drawhold)
-                actions.push(actlist)
             }
 
+
+
+                actlist=makeactionlist(x+drawadjustx,y+drawadjusty,direction,pathcurve,wid,len)
+        //const marks=[["_",1,0,2],["`-.",3,1,3],["`.",2,1,3],["\\",1,1,3],["|",0,1,3],["/",-1,1,4],[".´",-2,1,4],[".-´",-3,1,4],["_",-1,0,1],["`-.",-3,-1,1],["`.",-2,-1,1],["\\",-1,-1,1],["|",0,-1,2],["/",1,-1,2],[".´",2,-1,2],[".-´",3,-1,2]];
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            //drawhold=doaction(actlist,drawhold)
+            if(!stopped){
+                    actions.push(actlist)
+                }
+                
+            }
 
             x=actlist[2]-drawadjustx
             y=actlist[3]-drawadjusty
@@ -1467,7 +1723,7 @@ function cropAsciiImage(image, x1, y1, x2, y2) {
             colormap = overlayASCII(colormap,ftospace(canvas), 0,0);
             //canvas=overlayASCII(canvas, drawnpath[2],0,0);
             canvas=overlayASCII(canvas, drawhold,0,0+allshifty);
-
+            
             //canvas=overlayASCII(canvas, drawnpath[2],0+5,0+18);
 
             //canvas=ftospace(canvas);
@@ -1669,6 +1925,7 @@ function cropAsciiImage(image, x1, y1, x2, y2) {
         function update() {
             //patharray.push(Math.random() < 0.5 ? -1 : 1)
             difficulty=difficulty+0.99
+            cuttime=cuttime+speedf(difficulty)
             if (damage>0){
                 damage=damage-0.01//damagescale(difficulty)
             }
@@ -1727,20 +1984,66 @@ function cropAsciiImage(image, x1, y1, x2, y2) {
             switch (e.key) {
                 case "ArrowLeft":
                     pressed = "l";
+                    udlr[2]=true
                     break;
                 case "ArrowRight":
                     pressed = "r";
+                    udlr[3]=true
                     break;
                 case "ArrowUp":
                     pressed = "u";
+                    udlr[0]=true
                     break;
                 case "ArrowDown":
                     pressed = "d";
+                    udlr[1]=true
                     break;                
                 case "d":
                     damage=2
                     break;
+                case "p":
+                    if(relax){
+                        paused=!paused
+                    }
+                case "i":
+                    if(relax){
+                        intuitive=!intuitive
+                        stopped=false
+                    }
             }
+
+
+
+
+
+
+        });
+
+        document.addEventListener("keyup", e => {
+            const keysToBlock = ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"];
+            if (keysToBlock.includes(e.key)) {
+                e.preventDefault();
+            }
+
+            autoMove = false;
+
+            switch (e.key) {
+                case "ArrowLeft":
+                    udlr[2]=false
+                    break;
+                case "ArrowRight":
+                    udlr[3]=false
+                    break;
+                case "ArrowUp":
+                    udlr[0]=false
+                    break;
+                case "ArrowDown":
+                    udlr[1]=false
+                    break;   
+            }
+
+
+
         });
 
 
@@ -1748,7 +2051,7 @@ function cropAsciiImage(image, x1, y1, x2, y2) {
 
         function speedf(difficulty){
             if (relax){
-                return 200
+                return 193
             }
             speed=200
             if(lastframe){
@@ -1804,7 +2107,7 @@ function cropAsciiImage(image, x1, y1, x2, y2) {
 
         function gameLoop(timestamp) {
             if (timestamp - lastTime > speedf(difficulty)) { // 20 FPS
-                if((!gameover)){
+                if((!(gameover||paused))){
                     update();
                     draw();
 
